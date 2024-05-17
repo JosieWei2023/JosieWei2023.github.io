@@ -1,21 +1,21 @@
-export const THEME_CONFIG: App.Locals['config'] = {
+export const THEME_CONFIG: App.Locals["config"] = {
   /** blog title */
-  title: "活版印字",
+  title: "关心牙齿更关心你",
   /** your name */
-  author: "Typography",
+  author: "空心菜菜子",
   /** website description */
-  desc: "Rediscory the beauty of typography",
+  desc: "生活再也奴役不了我，我将被风吹成紫红的黄昏",
   /** your deployed domain */
-  website: "https://astro-theme-typography.vercel.app/",
+  website: "https://github.com/JosieWei2023/JosieWei2023.github.io",
   /** your locale */
-  locale: "en-us",
+  locale: "en-ca",
   /** theme style */
   themeStyle: "light",
   /** your socials */
   socials: [
     {
       name: "github",
-      href: "https://github.com/moeyua/astro-theme-typography",
+      href: "https://github.com/JosieWei2023",
     },
     {
       name: "rss",
@@ -23,16 +23,16 @@ export const THEME_CONFIG: App.Locals['config'] = {
     },
     {
       name: "twitter",
-      href: "https://github.com/moeyua/astro-theme-typography",
+      href: "https://github.com/JosieWei2023",
     },
     {
       name: "mastodon",
-      href: "https://github.com/moeyua/astro-theme-typography",
-    }
+      href: "https://github.com/JosieWei2023",
+    },
   ],
   /** your header info */
   header: {
-    twitter: "@moeyua13",
+    twitter: "@kongxincainaizi",
   },
   /** your navigation links */
   navs: [
@@ -46,16 +46,17 @@ export const THEME_CONFIG: App.Locals['config'] = {
     },
     {
       name: "Categories",
-      href: "/categories"
+      href: "/categories",
     },
-    {
-      name: "About",
-      href: "/about",
-    },
+    // {
+    //   name: "About",
+    //   href: "/about",
+    // },
   ],
   /** your category name mapping, which the `path` will be shown in the url */
   category_map: [
-    { name: "胡适", path: "hu-shi" },
+    { name: "月球背面", path: "behindthemoon" },
+    { name: "中国故事", path: "lifeinchina" },
   ],
   /** your comment provider */
   comments: {
@@ -79,6 +80,5 @@ export const THEME_CONFIG: App.Locals['config'] = {
     // twikoo: {
     //   envId: "https://twikoo-tau-flame.vercel.app",
     // }
-  }
-}
-
+  },
+};
