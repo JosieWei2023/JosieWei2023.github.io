@@ -57,6 +57,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
   category_map: [
     { name: "月球背面", path: "behindthemoon" },
     { name: "中国故事", path: "lifeinchina" },
+    { name: "读书笔记", path: "bookreviews" },
   ],
   /** your comment provider */
   comments: {
