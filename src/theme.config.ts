@@ -59,6 +59,9 @@ export const THEME_CONFIG: App.Locals["config"] = {
     { name: "中国故事", path: "lifeinchina" },
     { name: "读书笔记", path: "bookreview" },
     { name: "有点搞笑", path: "funnylife" },
+    { name: "记梦器", path: "dreamlog" },
+    { name: "年终总结", path: "summary" },
+    { name: "游记", path: "travel" },
   ],
   /** your comment provider */
   comments: {
