@@ -8,7 +8,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
   /** your deployed domain */
   website: "https://github.com/JosieWei2023/JosieWei2023.github.io",
   /** your locale */
-  locale: "en-ca",
+  locale: "en-us",
   /** theme style */
   themeStyle: "light",
   /** your socials */
