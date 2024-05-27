@@ -62,6 +62,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
     { name: "记梦器", path: "dreamlog" },
     { name: "年终总结", path: "summary" },
     { name: "游记", path: "travel" },
+    { name: "日常", path: "daily" },
   ],
   /** your comment provider */
   comments: {
