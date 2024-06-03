@@ -21,13 +21,13 @@ export const THEME_CONFIG: App.Locals["config"] = {
       name: "rss",
       href: "/atom.xml",
     },
-    {
-      name: "twitter",
-      href: "https://github.com/JosieWei2023",
-    },
+    // {
+    //   name: "twitter",
+    //   href: "https://github.com/JosieWei2023",
+    // },
     {
       name: "mastodon",
-      href: "https://github.com/JosieWei2023",
+      href: "@maoware@m.cmx.im",
     },
   ],
   /** your header info */
@@ -63,6 +63,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
     { name: "年终总结", path: "summary" },
     { name: "游记", path: "travel" },
     { name: "日常", path: "daily" },
+    { name: "收藏夹", path: "favorites" },
   ],
   /** your comment provider */
   comments: {
