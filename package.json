@@ -2,7 +2,7 @@
   "name": "astro-theme-typography",
   "type": "module",
   "version": "0.1.0",
-  "packageManager": "pnpm@9.1.2",
+  "packageManager": "pnpm@9.1.4",
   "repository": "https://github.com/JosieWei2023/JosieWei2023.github.io",
   "scripts": {
     "dev": "astro check && astro dev",
