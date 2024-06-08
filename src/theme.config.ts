@@ -89,7 +89,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
     //   loading: 'lazy',
     // },
     twikoo: {
-      envId: "https://josieblog.workers.dev",
+      envId: "https://twikoo-cloudflare.josieblog.workers.dev",
     },
   },
 };
