@@ -48,6 +48,10 @@ export const THEME_CONFIG: App.Locals["config"] = {
       name: "Categories",
       href: "/categories",
     },
+    {
+      name: "Friends",
+      href: "/friends",
+    },
     // {
     //   name: "About",
     //   href: "/about",
