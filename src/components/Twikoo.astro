@@ -1,4 +1,6 @@
 ---
+import { env } from 'process'
+
 interface Props {
   path: string
 }
@@ -7,6 +9,8 @@ const config = {
   ...Astro.locals.config.comments?.twikoo,
   el: '#tcomment',
   path: Astro.props.path,
+  lang: 'zh-CN',
+  envId: "https://josieblog.workers.dev",
 }
 ---
 
