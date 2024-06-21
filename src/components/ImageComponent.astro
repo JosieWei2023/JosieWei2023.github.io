@@ -1,14 +1,12 @@
-
 ---
 const { src, alt } = Astro.props;
 ---
 
 <div class="image-container">
-  <img src={src} alt={alt}/>
+  <img src={src} alt={alt} />
   <p class="image-alt">{alt}</p>
 </div>
 
-<style>
 <style>
 .image-container {
   max-width: 100%;
@@ -19,15 +17,14 @@ const { src, alt } = Astro.props;
 .image-container img {
   max-width: 100%;
   height: auto;
-  display: block; 
-  margin: 0 auto;
+  display: block; /* 确保图像是块级元素，使其独占一行 */
+  margin: 0 auto; /* 居中图像 */
 }
 
 .image-alt {
   margin-top: 8px;
   font-size: 14px;
   color: #666;
-  text-align: center;
+  text-align: center; /* 居中文本 */
 }
 </style>
-
