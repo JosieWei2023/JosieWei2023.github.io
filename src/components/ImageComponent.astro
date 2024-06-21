@@ -1,0 +1,25 @@
+
+---
+import { Image } from "astro:assets";
+const { src, alt } = Astro.props;
+---
+
+<div class="image-container">
+  <Image class="image" src={src} alt={alt} />
+</div>
+
+<style>
+.image-container {
+    display: flex;
+    justify-content: center; /* Aligns items in the center horizontally */
+    align-items: center; /* Aligns items in the center vertically */
+    gap: 20px; /* Space between images */
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  margin: 20px;
+}
+</style>
+

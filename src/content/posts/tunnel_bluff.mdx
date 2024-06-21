@@ -5,8 +5,8 @@ categories: ["游记"]
 description: "BC省五星级Trail推荐"
 ---
 
+import ImageComponent from "../../components/ImageComponent.astro";
 import "../../styles/index.css";
-
 import { Image } from "astro:assets";
 import alltrailstunnelbluff from "../../assets/alltrailstunnelbluff.jpg";
 import rainycloud from "../../assets/rainycloud.jpg";
@@ -17,9 +17,11 @@ import woods from "../../assets/woods.jpg";
 
 本周爬了 Tunnel Bluff from Lions Bay, 全程 13.7km，爬升 574m。
 
-<div className="image-container">
-  <Image src={alltrailstunnelbluff} alt="AllTrails 路程图" />
-</div>
+{" "}
+<ImageComponent
+  src="https://pub-a55ec74b764445bf87cc8622864a75d4.r2.dev/alltrailstunnelbluff.jpg"
+  alt="AllTrails 路程图"
+/>
 
 出发前夕，Z 来月经，T 感染了诺如病毒，两人接连请假。想到 Gina 上周说想蹭车，于是周五晚上临时发出 Hiking 邀约，为徒步团注入 00 后的新鲜血液。
 
