@@ -6,6 +6,7 @@ const { src, alt } = Astro.props;
 
 <div class="image-container">
   <Image src={src} alt={alt} inferSize={true}/>
+  <p class="image-alt">{alt}</p>
 </div>
 
 <style>
@@ -20,6 +21,12 @@ const { src, alt } = Astro.props;
   max-width: 100%;
   height: auto;
   margin: 20px;
+}
+
+.image-alt {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
 }
 </style>
 
