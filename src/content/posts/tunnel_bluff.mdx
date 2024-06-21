@@ -6,14 +6,6 @@ description: "BC省五星级Trail推荐"
 ---
 
 import ImageComponent from "../../components/ImageComponent.astro";
-import "../../styles/index.css";
-import { Image } from "astro:assets";
-import alltrailstunnelbluff from "../../assets/alltrailstunnelbluff.jpg";
-import rainycloud from "../../assets/rainycloud.jpg";
-import sunset from "../../assets/sunset.jpg";
-import tunnelbluff from "../../assets/tunnelbluff.jpg";
-import tunnelbluffdinner from "../../assets/tunnelbluffdinner.jpg";
-import woods from "../../assets/woods.jpg";
 
 本周爬了 Tunnel Bluff from Lions Bay, 全程 13.7km，爬升 574m。
 
@@ -51,9 +43,10 @@ D 真的是极佳的旅游搭子，每次出行都准备了很多鲜切水果，
 
 但是另一个方向却又是晴朗的天空。这就是我喜欢爬到高处的原因之一，仿佛有了上帝视角，放眼间可以收获很多风光。
 
-<div className="image-container">
-  <Image src={tunnelbluff} alt="晴朗的天空" />
-</div>
+<ImageComponent
+  src="https://pub-a55ec74b764445bf87cc8622864a75d4.r2.dev/tunnelbluff.jpg"
+  alt="晴朗的天空"
+/>
 
 临行前看天气预报，最高温也不过十多度，纠结再三还是带了件小马甲在包里。扑面而来的山风属实寒冷，急忙哆哆嗦嗦穿上了。仍觉不够，颇为羡慕带了羽绒服的 G 和 D。
 
@@ -71,7 +64,7 @@ G：说着话还不觉得，一不让我说话，感觉头更疼了！
 
 跟 Gina 聊到推特女权，已婚妇女统一被称为“婚驴”，感觉有的女权很排他。
 
-她：**女权是提纯，男权是包容。**
+**她：女权是提纯，男权是包容。**
 
 到了停车的地方，大家看为时尚早，提议要去 Squamish 小镇游览一番。驱车半小时抵达后发现不过是个平平无奇的 Town，中心开着麦当劳和星巴克。
 
@@ -79,9 +72,10 @@ G：说着话还不觉得，一不让我说话，感觉头更疼了！
 
 齐唱着 SHE 的歌又造访了韩国城，不吃内脏的 Z 不在，我们顺理成章去吃了牛肠锅，还点了海鲜饼、炒鱿鱼、猪骨汤和米酒。
 
-<div className="image-container">
-  <Image src={tunnelbluffdinner} alt="晚餐" />
-</div>
+<ImageComponent
+  src="https://pub-a55ec74b764445bf87cc8622864a75d4.r2.dev/cypressdinner.jpg"
+  alt="晚餐"
+/>
 
 这个海鲜饼又香又脆，吃的时候感觉基底是土豆，但回家查菜谱发现并没有用土豆做海鲜饼的菜谱，不知道是不是我味觉出了问题。
 
@@ -95,6 +89,7 @@ G：说着话还不觉得，一不让我说话，感觉头更疼了！
 
 今早刷 Reddit 看到有人在 Tunnel Bluff 拍到的夕阳，紫红色的黄昏，真美啊。
 
-<div className="image-container">
-  <Image src={sunset} alt="夕阳" />
-</div>
+<ImageComponent
+  src="https://pub-a55ec74b764445bf87cc8622864a75d4.r2.dev/sunset.jpg"
+  alt="夕阳"
+/>
