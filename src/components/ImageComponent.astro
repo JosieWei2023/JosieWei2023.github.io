@@ -1,13 +1,18 @@
 ---
 const { src, alt } = Astro.props;
 ---
-<div>
+<div class="container">
     <div class="image-container">
      <img src={src} alt={alt} />
     </div>
     <p class="image-alt">{alt}</p>
 </div>
 <style>
+.container {
+  margin: 0 auto;
+  max-width: 100%;
+    text-align: center;
+}
 .image-container {
   max-width: 100%;
   margin: 0 auto;
@@ -15,16 +20,17 @@ const { src, alt } = Astro.props;
 }
 
 .image-container img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
   display: block; 
-  margin: 0 auto; 
+  margin: 0 auto;
+  rounded: 8px; 
 }
 
 .image-alt {
   margin-top: 8px;
   font-size: 14px;
   color: #666;
-  text-align: center; 
+    font-style: italic;
 }
 </style>
