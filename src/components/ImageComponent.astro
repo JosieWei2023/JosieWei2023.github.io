@@ -1,11 +1,10 @@
 
 ---
-import { Image } from "astro:assets";
 const { src, alt } = Astro.props;
 ---
 
 <div class="image-container">
-  <Image class={image} src={src} alt={alt} inferSize={true}/>
+  <img src={src} alt={alt}/>
   <p class="image-alt">{alt}</p>
 </div>
 
@@ -17,11 +16,11 @@ const { src, alt } = Astro.props;
   text-align: center;
 }
 
-.image {
+.image-container img {
   max-width: 100%;
   height: auto;
-  display: block;
-  margin: 0 auto; 
+  display: block; 
+  margin: 0 auto;
 }
 
 .image-alt {
