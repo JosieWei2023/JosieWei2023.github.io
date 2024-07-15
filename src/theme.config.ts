@@ -27,7 +27,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
     // },
     {
       name: "mastodon",
-      href: "@maoware@m.cmx.im",
+      href: "https://m.cmx.im/@maoware",
     },
   ],
   /** your header info */
