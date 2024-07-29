@@ -116,6 +116,6 @@ L 推荐的。一部很温情的电影，很多细节好到不像是真的。
 
 还没看完...
 
-# 播客更新
+# 博客更新
 
-- [每周一山：Lindeman Lake] (https://josiewei2023.github.io/posts/lindeman_lake/)
+### [每周一山：Lindeman Lake](https://josiewei2023.github.io/posts/lindeman_lake/)
