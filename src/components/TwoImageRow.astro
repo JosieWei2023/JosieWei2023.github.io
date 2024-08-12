@@ -5,13 +5,13 @@ const { leftSrc, leftAlt, rightSrc, rightAlt } = Astro.props;
     <div class="image-row">
         <div class="image-container">
             <img src={leftSrc} alt={leftAlt} />
-            <p class="image-alt">{leftAlt}</p>
         </div>
         <div class="image-container">
             <img src={rightSrc} alt={rightAlt} />
-            <p class="image-alt">{rightAlt}</p>
         </div>
     </div>
+    <p class="image-alt">{leftAlt}</p>
+    <p class="image-alt">{rightAlt}</p>
 </div>
 <style>
 .container {
