@@ -69,8 +69,10 @@ article.heti a:hover {
 /* this is to apply background color to bold text */
 article.heti b,
 article.heti strong {
-  padding-block-end: 0px;
-  border-block-end: 1px solid rgb(7, 89, 133);
+  /* border-block-end: 1px solid rgb(7, 89, 133); */
+  color: theme("colors.background");
+  /* background-color: theme("colors.foreground"); */
+  background-color: rgb(7, 89, 133);
 }
 
 article.heti a:has(code) {
