@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "astro check && astro dev",
     "preview": "astro preview",
-    "generate:post-count": "node scripts/generatePostCount.js",
     "build": "astro check && astro build",
     "release": "esno scripts/release.ts",
     "astro": "astro",
