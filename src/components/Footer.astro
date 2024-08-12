@@ -1,6 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
-import { countPosts } from '../utils/countPosts.js'
+import postCountData from '../data/postCount.json';
+
 type Props = HTMLAttributes<'footer'>
 
 const { ...attrs } = Astro.props
@@ -9,7 +10,7 @@ const year = new Date().getFullYear()
 
 const { website, author } = Astro.locals.config
 
-const postCount = countPosts();
+const postCount = postCountData.count;
 ---
 
 <footer font-bold text-3 un-flex="~ col gap-1" un-lg="gap-3.5" {...attrs}>
