@@ -66,6 +66,13 @@ article.heti a:hover {
   border-block-end: 1px solid rgba(0, 0, 0, 0);
 }
 
+/* this is to apply background color to bold text */
+article.heti b,
+article.heti strong {
+  padding-block-end: 0px;
+  border-block-end: 1px solid rgb(7, 89, 133);
+}
+
 article.heti a:has(code) {
   transition: none;
   text-decoration: none;
