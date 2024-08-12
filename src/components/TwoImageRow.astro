@@ -1,0 +1,61 @@
+---
+const { leftSrc, leftAlt, rightSrc, rightAlt } = Astro.props;
+---
+<div class="container">
+    <div class="image-row">
+        <div class="image-container">
+            <img src={leftSrc} alt={leftAlt} />
+            <p class="image-alt">{leftAlt}</p>
+        </div>
+        <div class="image-container">
+            <img src={rightSrc} alt={rightAlt} />
+            <p class="image-alt">{rightAlt}</p>
+        </div>
+    </div>
+</div>
+<style>
+.container {
+    margin: 0 auto;
+    max-width: 100%;
+    text-align: center !important;
+}
+
+.image-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* This creates moderate spacing between the images */
+}
+
+.image-container {
+    flex: 1;
+    max-width: calc(50% - 10px); /* Subtracting half of the gap to ensure proper sizing */
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+.image-alt {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    text-align: center !important;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .image-row {
+        flex-direction: column;
+    }
+
+    .image-container {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+}
+</style>
