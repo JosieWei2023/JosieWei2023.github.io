@@ -1,17 +1,17 @@
 ---
-const { leftSrc, leftAlt, rightSrc, rightAlt } = Astro.props;
+const { leftSrc, rightSrc, alt } = Astro.props;
 ---
 <div class="container">
     <div class="image-row">
         <div class="image-container">
-            <img src={leftSrc} alt={leftAlt} />
+            <img src={leftSrc} alt={alt} />
         </div>
         <div class="image-container">
-            <img src={rightSrc} alt={rightAlt} />
+            <img src={rightSrc} alt={alt} />
         </div>
     </div>
-    <p class="image-alt">{leftAlt}</p>
-    <p class="image-alt">{rightAlt}</p>
+    <p class="image-alt">{alt}</p>
+    
 </div>
 <style>
 .container {
@@ -23,7 +23,7 @@ const { leftSrc, leftAlt, rightSrc, rightAlt } = Astro.props;
 .image-row {
     display: flex;
     justify-content: space-between;
-    gap: 20px; /* This creates moderate spacing between the images */
+    gap: 10px; /* This creates moderate spacing between the images */
 }
 
 .image-container {
