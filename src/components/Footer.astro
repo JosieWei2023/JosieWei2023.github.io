@@ -1,6 +1,5 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
-import postCountData from '../data/postCount.json';
 
 type Props = HTMLAttributes<'footer'>
 
@@ -10,16 +9,13 @@ const year = new Date().getFullYear()
 
 const { website, author } = Astro.locals.config
 
-const postCount = postCountData.count;
+
 ---
 
 <footer font-bold text-3 un-flex="~ col gap-1" un-lg="gap-3.5" {...attrs}>
   <p>
     © {year}
     <a target="_blank" href={website} rel="noopener noreferrer">{author}</a>
-  </p>
-  <p>
-    发表了{postCount}篇文章
   </p>
   <p>
     Theme
