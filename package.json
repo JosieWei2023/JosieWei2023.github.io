@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "astro check && astro dev",
     "preview": "astro preview",
+    "generate:post-count": "node scripts/generatePostCount.js",
     "build": "astro check && astro build",
     "release": "esno scripts/release.ts",
     "astro": "astro",
@@ -22,9 +23,10 @@
     "astro": "^4.5.9",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^0.8.3",
+    "astro-theme-typography": "file:",
     "giscus": "^1.5.0",
     "sharp": "^0.33.4",
-    "typescript": "^5.3.3",
+    "typescript": "^5.5.4",
     "vite": "^5.2.8"
   },
   "devDependencies": {
