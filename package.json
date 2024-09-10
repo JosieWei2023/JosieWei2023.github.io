@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "astro check && astro dev",
     "preview": "astro preview",
+    "generate:post-count": "node scripts/generatePostCount.js",
     "build": "astro check && astro build",
     "release": "esno scripts/release.ts",
     "astro": "astro",
@@ -15,7 +16,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
-    "@astrojs/mdx": "^2.2.3",
+    "@astrojs/mdx": "^2.3.1",
     "@astrojs/rss": "^4.0.4",
     "@astrojs/sitemap": "^3.0.5",
     "@github/clipboard-copy-element": "^1.3.0",
@@ -25,17 +26,17 @@
     "astro-theme-typography": "file:",
     "giscus": "^1.5.0",
     "sharp": "^0.33.4",
-    "typescript": "^5.3.3",
+    "typescript": "^5.5.4",
     "vite": "^5.2.8"
   },
   "devDependencies": {
-    "@iconify-json/mdi": "^1.1.64",
+    "@iconify-json/mdi": "^1.2.0",
     "@types/markdown-it": "^13.0.7",
     "@types/node": "^20.12.7",
     "@types/sanitize-html": "^2.9.5",
     "@unocss/reset": "^0.59.0",
     "@unocss/transformer-directives": "^0.58.5",
-    "bumpp": "^9.4.0",
+    "bumpp": "^9.5.2",
     "changelogen": "^0.5.5",
     "consola": "^3.2.3",
     "esno": "^4.7.0",
