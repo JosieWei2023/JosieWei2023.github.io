@@ -6,7 +6,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
   /** website description */
   desc: "生活再也奴役不了我，我将被风吹成紫红的黄昏",
   /** your deployed domain */
-  website: "https://github.com/JosieWei2023/JosieWei2023.github.io",
+  website: "https://josiewei2023.github.io/",
   /** your locale */
   locale: "en-us",
   /** theme style */
