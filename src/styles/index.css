@@ -72,8 +72,12 @@ article.heti strong {
   /* border-block-end:1p x solid rgb(7, 89, 133); */
   /* color: theme("colors.background"); */
   /* background-color: theme("colors.foreground"); */
-  background-color: rgb(105, 194, 238);
+  background-color: rgb(150, 210, 240);
   padding: 2px;
+  border-radius: 4px;
+  margin: 0px 2px;
+  /* remove bold */
+  font-weight: normal;
 }
 
 article.heti a:has(code) {
