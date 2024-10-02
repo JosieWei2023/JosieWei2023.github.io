@@ -91,7 +91,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
     twikoo: {
       // envId: "https://twikoo-cloudflare.josieblog.workers.dev",
       envId:
-        "https://66fcb36d93a39132fea2bf6d--reliable-basbousa-5e2a95.netlify.app/.netlify/functions/twikoo",
+        "https://66fcb36d93a39132fea2bf6d--josiewei2023.netlify.app/.netlify/functions/twikoo",
     },
   },
 };
