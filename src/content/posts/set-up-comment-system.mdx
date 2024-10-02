@@ -1,0 +1,34 @@
+---
+title: 配置博客评论系统的曲折之路
+pubDate: 2024-10-01
+categories: ["有点搞笑"]
+description: "简单描述一下自己没苦硬吃的全过程（纯技术向吐槽，慎入！）"
+---
+
+### 最开始的时候...
+
+我 21 年注册公众号的时候，因为不是很能理解的政策原因，是没有评论功能的。搞得我一直很烦恼，很想人来评论我写的东西。所以搭了这个草台博客以后就开始折腾评论系统。一开始模板自带的是 Disqus，需要用户注册后才能评论，感觉这种非常劝退。看见友邻推荐了 Twikoo，觉得很简洁，准备装到我的博客上。
+
+### 然后脑子有坑的我...
+
+不知道为什么那段时间对**cloudflare**特别有好感，正好 Twikoo 开始支持部署到 cloudflare 的 D1 上。于是我哼哧哼哧跟着写得不是很好的文档操作了好久。终于配置成功了！然后我突然发现在别人博客留言得到回复以后，是有邮箱提醒的。我的博客没有！
+
+于是我照着象友的这篇[静态博客 Twikoo 配置指引](https://thirdshire.com/twikoo-tutorial/)操作了一番，一直乱码报错。困惑了一会又回去看文档，发现 cloudflare 上部署的后端，不支持 SMTP：
+
+> Because of the compatibility issues of nodemailer package, the email integration via SMTP for sending notifications won't work directly. Instead, in this worker, we support email notifications via SendGrid's HTTPS API.
+
+### 但我也不会轻言放弃
+
+我就接着去申请注册 SendGrid。这网站真的很狗屎！首先是用谷歌注册的账号，last name 无法自动带出，但又是必填项，导致账号无法注册成功。然后我换了 outlook 的邮箱手动注册，一番操作终于注册好了。下一秒收到官方邮件，说出于安全考虑把我的注册驳回了。**震惊我一脸！** 我只好在 github 提 issue，问这种要咋办，作者回复我可以自己修改代码定制一个邮件服务。
+
+于是我上网搜了一下，23 年开始就有网友陆续被**SendGrid**驳回注册申请，大家推荐使用 Poshmark 替代。然后我在 gpt 的帮助下改好了代码又去注册了 Poshmark。
+
+### 搞笑的事情来了
+
+原来 Poshmark 不允许用 public domain 的邮箱注册账号！试了试虽然我的 edu 邮箱倒是符合条件，就是这也太裸奔了吧，来自 xxx 大学的 xx 回复了你的评论？虽然可以自己掏钱买域名，但我又不想花钱。
+
+### 最后我洗心革面
+
+彻底抛弃了 cloudflare 的 d1，用了官方四星推荐的 netlify。不到一个小时就配置好了评论系统，成功实现了邮箱推送功能。
+
+以上就是我**没苦硬吃**的全过程！
