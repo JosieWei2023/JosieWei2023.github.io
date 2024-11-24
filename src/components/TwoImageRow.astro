@@ -1,61 +1,105 @@
 ---
-const { leftSrc, rightSrc, alt } = Astro.props;
+interface Props {
+    leftSrc: string;
+    rightSrc: string;
+    alt: string;
+    leftLabel?: string;  // Optional label for left image
+    rightLabel?: string; // Optional label for right image
+}
+
+const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
 ---
-<div class="container">
+<div class="container" role="figure" aria-label={alt}>
     <div class="image-row">
         <div class="image-container">
-            <img src={leftSrc} alt={alt} />
+            <img src={leftSrc} alt={`${alt} (left${leftLabel ? `: ${leftLabel}` : ''})`} />
+            {leftLabel && <span class="image-label">{leftLabel}</span>}
         </div>
         <div class="image-container">
-            <img src={rightSrc} alt={alt} />
+            <img src={rightSrc} alt={`${alt} (right${rightLabel ? `: ${rightLabel}` : ''})`} />
+            {rightLabel && <span class="image-label">{rightLabel}</span>}
         </div>
     </div>
     <p class="image-alt">{alt}</p>
-    
 </div>
+
 <style>
 .container {
-    margin: 0 auto;
+    margin: 2rem auto;
     max-width: 100%;
-    text-align: center !important;
+    text-align: center;
 }
 
 .image-row {
     display: flex;
-    justify-content: space-between;
-    gap: 2px; /* This creates moderate spacing between the images */
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .image-container {
     flex: 1;
-    max-width: calc(50% - 5px); /* Subtracting half of the gap to ensure proper sizing */
+    max-width: calc(50% - 0.5rem);
+    position: relative;
 }
 
 .image-container img {
     width: 100%;
     height: auto;
     display: block;
-    margin: 0 auto;
     border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.image-container img:hover {
+    transform: scale(1.02);
+}
+
+.image-label {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #666;
 }
 
 .image-alt {
-    margin-top: 8px;
-    font-size: 14px;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
     color: #666;
     font-style: italic;
-    text-align: center !important;
+    text-align: center;
+    max-width: 80ch;
+    margin-inline: auto;
 }
 
-/* Responsive design for smaller screens */
+/* Responsive design */
 @media (max-width: 768px) {
     .image-row {
         flex-direction: column;
+        gap: 1.5rem;
     }
 
     .image-container {
         max-width: 100%;
-        /* margin-bottom: 20px; */
+    }
+    
+    .image-alt {
+        padding: 0 1rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .image-alt,
+    .image-label {
+        color: #333;
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .image-container img {
+        transition: none;
     }
 }
 </style>
