@@ -46,14 +46,14 @@ const {
 
 .image-row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 1rem;
     margin-bottom: 0.5rem;
 }
 
 .image-container {
     flex: 1;
-    max-width: calc(33.333% - 0.667rem); /* Adjusts for three images with gaps */
+    width: calc(33.333% - 0.667rem);
     position: relative;
 }
 
@@ -63,8 +63,8 @@ const {
     display: block;
     border-radius: 8px;
     transition: transform 0.2s ease;
-    object-fit: cover; /* Ensures consistent image display */
-    aspect-ratio: 1 / 1; /* Optional: maintains square aspect ratio */
+    object-fit: cover;
+    aspect-ratio: 1 / 1; /* Maintains square aspect ratio - remove if you want natural image proportions */
 }
 
 .image-container img:hover {
@@ -96,27 +96,11 @@ const {
     }
 
     .image-container {
-        max-width: 100%;
+        width: 100%;
     }
     
     .image-alt {
         padding: 0 1rem;
-    }
-}
-
-/* Tablet layout - optional breakpoint for 2+1 layout */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .image-row {
-        flex-wrap: wrap;
-    }
-
-    .image-container {
-        max-width: calc(50% - 0.5rem);
-    }
-
-    .image-container:last-child {
-        max-width: 50%;
-        margin: 1rem auto 0;
     }
 }
 
