@@ -1,19 +1,33 @@
 ---
 interface Props {
     leftSrc: string;
+    middleSrc: string;
     rightSrc: string;
     alt: string;
-    leftLabel?: string;  // Optional label for left image
-    rightLabel?: string; // Optional label for right image
+    leftLabel?: string;
+    middleLabel?: string;
+    rightLabel?: string;
 }
 
-const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
+const { 
+    leftSrc, 
+    middleSrc, 
+    rightSrc, 
+    alt, 
+    leftLabel, 
+    middleLabel, 
+    rightLabel 
+} = Astro.props;
 ---
 <div class="container" role="figure" aria-label={alt}>
     <div class="image-row">
         <div class="image-container">
             <img src={leftSrc} alt={`${alt} (left${leftLabel ? `: ${leftLabel}` : ''})`} />
             {leftLabel && <span class="image-label">{leftLabel}</span>}
+        </div>
+        <div class="image-container">
+            <img src={middleSrc} alt={`${alt} (middle${middleLabel ? `: ${middleLabel}` : ''})`} />
+            {middleLabel && <span class="image-label">{middleLabel}</span>}
         </div>
         <div class="image-container">
             <img src={rightSrc} alt={`${alt} (right${rightLabel ? `: ${rightLabel}` : ''})`} />
@@ -33,13 +47,13 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
 .image-row {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 1rem;
     margin-bottom: 0.5rem;
 }
 
 .image-container {
     flex: 1;
-    max-width: calc(50% - 0.25rem);
+    max-width: calc(33.333% - 0.667rem); /* Adjusts for three images with gaps */
     position: relative;
 }
 
@@ -49,6 +63,8 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
     display: block;
     border-radius: 8px;
     transition: transform 0.2s ease;
+    object-fit: cover; /* Ensures consistent image display */
+    aspect-ratio: 1 / 1; /* Optional: maintains square aspect ratio */
 }
 
 .image-container img:hover {
@@ -85,6 +101,22 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
     
     .image-alt {
         padding: 0 1rem;
+    }
+}
+
+/* Tablet layout - optional breakpoint for 2+1 layout */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .image-row {
+        flex-wrap: wrap;
+    }
+
+    .image-container {
+        max-width: calc(50% - 0.5rem);
+    }
+
+    .image-container:last-child {
+        max-width: 50%;
+        margin: 1rem auto 0;
     }
 }
 
