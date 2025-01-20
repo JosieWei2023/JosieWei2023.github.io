@@ -96,108 +96,97 @@ const formatDate = (dateString: string) => {
 
 <style>
     /* NeoDB Card Styles */
+    // Neodb card style
 .db-card {
-  margin: 2rem 0;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-}
-
-.db-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 2.5rem 2.5rem;
+    background: var(--color-codebg);
+    border-radius: 7px;
+    box-shadow: 0 6px 10px 0 #00000053;
 }
 
 .db-card-subject {
-  display: grid;
-  grid-template-columns: 120px 1fr auto;
-  gap: 1.5rem;
-  align-items: start;
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.6;
+    padding: 12px;
+    position: relative;
 }
 
-.db-card-post img {
-  border-radius: 4px;
-  transition: transform 0.3s ease;
-}
-
-.db-card-post img:hover {
-  transform: scale(1.05);
+.dark .db-card {
+    background: var(--color-codebg);
 }
 
 .db-card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+    flex: 1 1 auto;
+    overflow: auto;
+    margin-top: 8px;
+}
+
+.db-card-post {
+    width: 100px;
+    margin-right: 15px;
+    margin-top: 20px;
+    display: flex;
+    flex: 0 0 auto;
 }
 
 .db-card-title {
-  font-size: 1.25rem;
-  line-height: 1.4;
+    margin-bottom: 3px;
+    font-size: 1.6rem;
+    color: var(--card-text-color-main);
+    font-weight: bold;
 }
 
 .db-card-title a {
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-  transition: color 0.3s ease 0s, background-color 0.3s ease 0s;
-}
-
-.db-card-title a:hover {
-  color: theme("colors.background");
-  background-color: theme("colors.foreground");
+    text-decoration: none!important;
 }
 
 .db-card-rating {
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.db-card-rating i {
-  color: #FFD700;
-  font-size: 0.9rem;
+    font-size: calc(var(--article-font-size) * 0.9);
 }
 
 .db-card-comment {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-top: 0.5rem;
-  color: rgba(0, 0, 0, 0.8);
+    font-size: calc(var(--article-font-size) * 0.9);
+    margin-top: 10px;
+    margin-bottom: 15px;
+    overflow: auto;
+    max-height: 150px!important;
+    color: var(--card-text-color-main);
 }
 
 .db-card-cate {
-  font-size: 0.85rem;
-  color: rgba(0, 0, 0, 0.5);
-  padding: 0.25rem 0.75rem;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 999px;
-  white-space: nowrap;
-  height: fit-content;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #8aa2d3;
+    padding: 1px 8px;
+    font-size: small;
+    font-style: italic;
+    border-radius: 0 8px 0 8px;
+    text-transform: capitalize;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .db-card-subject {
-    grid-template-columns: 100px 1fr;
-  }
-  
-  .db-card-cate {
-    grid-column: 1 / -1;
-    justify-self: start;
-    margin-top: 1rem;
-  }
+ .db-card-post img {
+    width: 100px!important;
+    height: 150px!important;
+    border-radius: 4px;
+    -o-object-fit: cover;
+    object-fit: cover;
 }
 
-@media (max-width: 480px) {
-  .db-card-subject {
-    grid-template-columns: 1fr;
-  }
-  
-  .db-card-post {
-    max-width: 120px;
-  }
+@media (max-width: 600px) {
+    .db-card {
+        margin: 0.8rem 0.5rem;
+    }
+    .db-card-title {
+        font-size: calc(var(--article-font-size) * 0.75);
+    }
+    .db-card-rating {
+      font-size: calc(var(--article-font-size) * 0.7);
+    }
+    .db-card-comment {
+      font-size: calc(var(--article-font-size) * 0.7);
+    }
 }
+
 </style>
