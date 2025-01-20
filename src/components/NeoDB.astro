@@ -1,0 +1,204 @@
+---
+// NeoDB Card Component
+interface Props {
+  dbUrl: string;
+  authToken: string;
+}
+
+const { dbUrl } = Astro.props;
+const API_URL = "https://neodb.social/api/me/shelf/item/";
+const authToken = "DJZA3gPzZnvJhbT9_1-VzVhM-XW4T4G3SRz8zeH5VaJ-DAlYS1I7Sjmg4A"
+
+// Extract item_uuid from the URL
+const itemUuidMatch = dbUrl.match(/.*neodb\.social\/.*\/(.*)/);
+if (!itemUuidMatch) {
+  throw new Error("Invalid URL format");
+}
+
+const itemUuid = itemUuidMatch[1];
+const dbApiUrl = `${API_URL}${itemUuid}`;
+
+// Fetch data
+let dbData;
+try {
+  const response = await fetch(dbApiUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+  dbData = await response.json();
+} catch (error) {
+  console.error("Failed to fetch NeoDB data:", error);
+}
+
+// Calculate star rating
+const calculateStars = (rating: number) => {
+  const starCount = (rating * 5) / 10;
+  const fullStars = Math.floor(starCount);
+  const halfStar = rating % 2 ? 1 : 0;
+  const emptyStars = 5 - (fullStars + halfStar);
+  return { fullStars, halfStar, emptyStars };
+};
+
+const { fullStars, halfStar, emptyStars } = dbData ? calculateStars(dbData.rating_grade) : { fullStars: 0, halfStar: 0, emptyStars: 5 };
+
+// Format date
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(date).replace(/\//g, '年') + '日';
+};
+---
+
+{dbData ? (
+  <div class="db-card">
+    <div class="db-card-subject">
+      <div class="db-card-post">
+        <img 
+          src={dbData.item.cover_image_url} 
+          alt="Cover Image"
+          style="max-width: 100%; height: auto;"
+        />
+      </div>
+      <div class="db-card-content">
+        <div class="db-card-title">
+          <a href={dbUrl} class="cute" target="_blank" rel="noreferrer">
+            {dbData.item.title}
+          </a>
+        </div>
+        <div class="db-card-rating">
+          {formatDate(dbData.created_time)} 读过
+          {/* Full stars */}
+          {[...Array(fullStars)].map(() => (
+            <i class="fa-solid fa-star"></i>
+          ))}
+          {/* Half star */}
+          {halfStar === 1 && <i class="fa-regular fa-star-half-stroke"></i>}
+          {/* Empty stars */}
+          {[...Array(emptyStars)].map(() => (
+            <i class="fa-regular fa-star"></i>
+          ))}
+        </div>
+        {dbData.comment_text && (
+          <div class="db-card-comment">{dbData.comment_text}</div>
+        )}
+      </div>
+      <div class="db-card-cate">{dbData.item.category}</div>
+    </div>
+  </div>
+) : (
+  <p style="text-align: center;">
+    <small>Failed to fetch content, please check the API validity.</small>
+  </p>
+)}
+
+<style>
+    /* NeoDB Card Styles */
+.db-card {
+  margin: 2rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.db-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.db-card-subject {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.db-card-post img {
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.db-card-post img:hover {
+  transform: scale(1.05);
+}
+
+.db-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.db-card-title {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.db-card-title a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: color 0.3s ease 0s, background-color 0.3s ease 0s;
+}
+
+.db-card-title a:hover {
+  color: theme("colors.background");
+  background-color: theme("colors.foreground");
+}
+
+.db-card-rating {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.db-card-rating i {
+  color: #FFD700;
+  font-size: 0.9rem;
+}
+
+.db-card-comment {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.db-card-cate {
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .db-card-subject {
+    grid-template-columns: 100px 1fr;
+  }
+  
+  .db-card-cate {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .db-card-subject {
+    grid-template-columns: 1fr;
+  }
+  
+  .db-card-post {
+    max-width: 120px;
+  }
+}
+</style>
