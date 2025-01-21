@@ -8,14 +8,15 @@ const { ...attrs } = Astro.props
 const year = new Date().getFullYear()
 
 const { website, author } = Astro.locals.config
-
-
 ---
 
 <footer font-bold text-3 un-flex="~ col gap-1" un-lg="gap-3.5" {...attrs}>
   <p>
     © {year}
     <a target="_blank" href={website} rel="noopener noreferrer">{author}</a>
+  </p>
+  <p>
+    This site has been running for <span id="runningdays">calculating...</span>
   </p>
   <p>
     Theme
@@ -27,3 +28,53 @@ const { website, author } = Astro.locals.config
     <a target="_blank" href="https://astro.build" rel="noopener noreferrer">Astro</a>
   </p>
 </footer>
+
+<script>
+  function calculateRuntime() {
+    const startDate = new Date('2024/5/16'); // Your website start date
+    const currentDate = new Date();
+    
+    // Calculate years, months, and days
+    let years = currentDate.getFullYear() - startDate.getFullYear();
+    let months = currentDate.getMonth() - startDate.getMonth();
+    let days = currentDate.getDate() - startDate.getDate();
+    
+    // Adjust for negative days
+    if (days < 0) {
+      months -= 1;
+      // Get last day of previous month
+      const lastDay = new Date(
+        currentDate.getFullYear(), 
+        currentDate.getMonth(), 
+        0
+      ).getDate();
+      days += lastDay;
+    }
+    
+    // Adjust for negative months
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+    
+    // Format the result
+    const result = `${years}年${months}月${days}天`;
+    
+    // Update the display
+    const element = document.getElementById('runningdays');
+    if (element) {
+      element.textContent = result;
+    }
+  }
+
+  // Calculate immediately when script loads
+  calculateRuntime();
+  
+  // Optional: Update every day at midnight
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+      calculateRuntime();
+    }
+  }, 1000);
+</script>
