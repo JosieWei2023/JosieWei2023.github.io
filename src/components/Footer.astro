@@ -60,9 +60,9 @@ const { website, author } = Astro.locals.config
     // Format the result, only including years if greater than 0
     let result = '';
     if (years > 0) {
-      result = `${years}年${months}月${days}天`;
+      result = `${years} year ${months} months`;
     } else {
-      result = `${months}月${days}天`;
+      result = `${months} months ${days} days`;
     }
     
     // Update the display
