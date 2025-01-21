@@ -31,7 +31,7 @@ const { website, author } = Astro.locals.config
 
 <script>
   function calculateRuntime() {
-    const startDate = new Date('2024/5/16'); // Your website start date
+    const startDate = new Date('2023/3/18'); // Your website start date
     const currentDate = new Date();
     
     // Calculate years, months, and days
@@ -57,8 +57,13 @@ const { website, author } = Astro.locals.config
       months += 12;
     }
     
-    // Format the result
-    const result = `${years}年${months}月${days}天`;
+    // Format the result, only including years if greater than 0
+    let result = '';
+    if (years > 0) {
+      result = `${years}年${months}月${days}天`;
+    } else {
+      result = `${months}月${days}天`;
+    }
     
     // Update the display
     const element = document.getElementById('runningdays');
@@ -70,7 +75,7 @@ const { website, author } = Astro.locals.config
   // Calculate immediately when script loads
   calculateRuntime();
   
-  // Optional: Update every day at midnight
+  // Update every day at midnight
   setInterval(() => {
     const now = new Date();
     if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
