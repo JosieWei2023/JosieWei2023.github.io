@@ -6,12 +6,13 @@ interface Props {
 }
 
 const { permalink, emoji = "❤️" } = Astro.props;
+const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
 ---
 
-
-<open-heart href=`https://worker-test.josieblog.workers.dev/${permalink}` emoji={emoji}>{emoji}</open-heart>
-
-
+<open-heart href={workerUrl} emoji={emoji}>
+  <span class="emoji">{emoji}</span>
+  <span class="count"></span>
+</open-heart>
 
 <script>
   // Load the web component
@@ -22,6 +23,21 @@ const { permalink, emoji = "❤️" } = Astro.props;
     document.querySelectorAll('open-heart').forEach(heart => {
       if ('getCount' in heart) {
         (heart as any).getCount();
+        
+        // Add mutation observer to watch for count attribute changes
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'count') {
+              const count = heart.getAttribute('count');
+              const countSpan = heart.querySelector('.count');
+              if (countSpan && count !== null && count !== '0') {
+                countSpan.textContent = count;
+              }
+            }
+          });
+        });
+
+        observer.observe(heart, { attributes: true });
       }
     });
   });
@@ -36,32 +52,41 @@ const { permalink, emoji = "❤️" } = Astro.props;
 </script>
 
 <style>
-    open-heart {
+  open-heart {
     margin: var(--card-padding);
     margin-top: 0;
-    display: block;  // Center alignment
+    display: block;
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
     border: 1px solid #FFA7B6;
-    border-radius: .4em;
-    padding: .4em;
+    border-radius: 0.4em;
+    padding: 0.4em;
+  }
 
-    }
-    open-heart:not([disabled]):hover,
-    open-heart:not([disabled]):focus {
+  open-heart:not([disabled]):hover,
+  open-heart:not([disabled]):focus {
     border-color: var(--accent-color);
     cursor: pointer;
-    }
-    open-heart[disabled] {
+  }
+
+  open-heart[disabled] {
     background: #FFA7B6;
     border: 1px solid #FFA7B6;
     cursor: not-allowed;
     color: #fff;
-    }
-    open-heart[count]:not([count="0"])::after {
-    content: attr(count);
-    padding: .2em;
-    }
+  }
 
+  .emoji {
+    margin-right: 0.2em;
+  }
+
+  .count {
+    font-size: 0.9em;
+    color: #666;
+  }
+
+  .count:empty {
+    display: none;
+  }
 </style>
