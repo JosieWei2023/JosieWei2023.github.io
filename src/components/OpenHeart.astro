@@ -9,13 +9,15 @@ const { permalink, emoji = "❤️" } = Astro.props;
 const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
 ---
 
-<open-heart href={workerUrl} emoji={emoji}>{emoji}</open-heart>
+<div class="heart-container">
+  <open-heart href={workerUrl} emoji={emoji}>{emoji}</open-heart>
+</div>
 
 <script>
-  // Import our custom web component
-  import "./open-heart-element.js";
+  // Load the web component
+  import "https://unpkg.com/open-heart-element";
 
-  // Initialize components when defined
+  // Initialize components when they're defined
   window.customElements.whenDefined('open-heart').then(() => {
     document.querySelectorAll('open-heart').forEach(heart => {
       if ('getCount' in heart) {
@@ -34,24 +36,25 @@ const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
 </script>
 
 <style>
-  open-heart {
+  .heart-container {
     margin: var(--card-padding);
     margin-top: 0;
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+  }
+
+  open-heart {
     border: 1px solid #FFA7B6;
     border-radius: 0.4em;
     padding: 0.4em;
-    cursor: pointer;
-    transition: all 0.2s ease;
   }
 
   open-heart:not([disabled]):hover,
   open-heart:not([disabled]):focus {
     border-color: var(--accent-color);
-    transform: scale(1.05);
+    cursor: pointer;
   }
 
   open-heart[disabled] {
@@ -59,23 +62,13 @@ const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
     border: 1px solid #FFA7B6;
     cursor: not-allowed;
     color: #fff;
-    opacity: 0.7;
   }
 
-  open-heart[clicked] {
-    animation: pulse 0.3s ease-in-out;
-  }
-
+  /* Display count using the count attribute */
   open-heart[count]:not([count="0"])::after {
     content: " " attr(count);
     font-size: 0.9em;
-    padding-left: 0.4em;
     color: #666;
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    padding-left: 0.2em;
   }
 </style>
