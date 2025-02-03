@@ -9,34 +9,43 @@ const { permalink, emoji = "❤️" } = Astro.props;
 const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
 ---
 
-<!-- emoji component -->
-<open-heart href={workerUrl} emoji={emoji}>{emoji}</open-heart>
+<div class="heart-container">
+  <open-heart href={workerUrl} emoji={emoji}>{emoji}</open-heart>
+</div>
 
-<!-- load web component -->
-<script src="https://unpkg.com/open-heart-element" type="module"></script>
-
-<!-- when the webcomponent loads, fetch the current counts for that page -->
 <script>
-window.customElements.whenDefined('open-heart').then(() => {
-  for (const oh of document.querySelectorAll('open-heart')) {
-    oh.getCount()
-  }
-})
+  // Load the web component
+  import "https://unpkg.com/open-heart-element";
 
-// refresh component after click
-window.addEventListener('open-heart', e => {
-  e && e.target && e.target.getCount && e.target.getCount()
-})
+  // Initialize components when they're defined
+  window.customElements.whenDefined('open-heart').then(() => {
+    document.querySelectorAll('open-heart').forEach(heart => {
+      if ('getCount' in heart) {
+        (heart as any).getCount();
+      }
+    });
+  });
+
+  // Refresh component after click
+  window.addEventListener('open-heart', (e) => {
+    const target = e.target as any;
+    if (target?.getCount) {
+      target.getCount();
+    }
+  });
 </script>
 
 <style>
-  open-heart {
+  .heart-container {
     margin: var(--card-padding);
     margin-top: 0;
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+  }
+
+  open-heart {
     border: 1px solid #FFA7B6;
     border-radius: 0.4em;
     padding: 0.4em;
@@ -48,15 +57,13 @@ window.addEventListener('open-heart', e => {
     cursor: pointer;
   }
 
-  open-heart[disabled] {
-    background: #FFA7B6;
-    border: 1px solid #FFA7B6;
-    cursor: not-allowed;
-    color: #fff;
-  }
 
+
+  /* Display count using the count attribute */
   open-heart[count]:not([count="0"])::after {
     content: " " attr(count);
+    font-size: 0.9em;
+    color: #666;
     padding-left: 0.2em;
   }
 </style>
