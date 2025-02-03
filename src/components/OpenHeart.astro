@@ -11,28 +11,34 @@ const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
 
 <open-heart href={workerUrl} emoji={emoji}>
   <span class="emoji">{emoji}</span>
-  <span class="count"></span>
+  <span class="count" id="count-display"></span>
 </open-heart>
 
 <script>
   // Load the web component
   import "https://unpkg.com/open-heart-element";
 
+  function updateCount(heart: Element) {
+    const count = heart.getAttribute('count');
+    const countDisplay = heart.querySelector('.count');
+    if (countDisplay && count && count !== '0') {
+      countDisplay.textContent = ` ${count}`;
+    }
+  }
+
   // Initialize components when they're defined
   window.customElements.whenDefined('open-heart').then(() => {
     document.querySelectorAll('open-heart').forEach(heart => {
       if ('getCount' in heart) {
-        (heart as any).getCount();
+        (heart as any).getCount().then(() => {
+          updateCount(heart);
+        });
         
         // Add mutation observer to watch for count attribute changes
         const observer = new MutationObserver((mutations) => {
           mutations.forEach((mutation) => {
             if (mutation.attributeName === 'count') {
-              const count = heart.getAttribute('count');
-              const countSpan = heart.querySelector('.count');
-              if (countSpan && count !== null && count !== '0') {
-                countSpan.textContent = count;
-              }
+              updateCount(heart);
             }
           });
         });
@@ -46,7 +52,9 @@ const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
   window.addEventListener('open-heart', (e) => {
     const target = e.target as any;
     if (target?.getCount) {
-      target.getCount();
+      target.getCount().then(() => {
+        updateCount(target);
+      });
     }
   });
 </script>

@@ -14,7 +14,7 @@ function getCategoryUrl(category: string) {
   return `/categories/${getPathFromCategory(category, THEME_CONFIG.category_map)}`
 }
 ---
-
+<>
 <article class="heti">
   <header>
     <h1 class="post-title!">
@@ -34,8 +34,10 @@ function getCategoryUrl(category: string) {
     </div>
   </header>
   <slot />
+
+</article>
   <!-- OpenHeart component added at the end -->
   <div class="mt-6">
     <OpenHeart permalink={post.slug} />
   </div>
-</article>
+</>
