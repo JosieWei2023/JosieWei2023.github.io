@@ -46,7 +46,7 @@ function getUrl(slug: string) {
   />
    <!-- OpenHeart component added at the end -->
    <div class="mt-6">
-    <OpenHeart permalink={entry.slug} />
+    <OpenHeart permalink=`josiewei2023.github.io/posts/${entry.slug}` />
   </div>
   <!-- BUG 这里使用 client:visible 会导致构建失败。ref: https://github.com/withastro/astro/issues/7329 -->
     <Comments post={entry} />
