@@ -5,6 +5,7 @@ import { getPosts } from '~/utils'
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro'
 import Pagination from '~/components/Pagination.astro'
 import Comments from '~/components/Comments.astro'
+import OpenHeart from '~/components/OpenHeart.astro'
 
 export const getStaticPaths = (async ({}) => {
   const posts = await getPosts()
@@ -43,6 +44,10 @@ function getUrl(slug: string) {
     rightUrl={getUrl(next?.slug)}
     showPageCount={false}
   />
+   <!-- OpenHeart component added at the end -->
+   <div class="mt-6">
+    <OpenHeart permalink={entry.slug} />
+  </div>
   <!-- BUG 这里使用 client:visible 会导致构建失败。ref: https://github.com/withastro/astro/issues/7329 -->
     <Comments post={entry} />
 </LayoutDefault>

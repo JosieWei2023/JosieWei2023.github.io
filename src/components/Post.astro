@@ -1,7 +1,7 @@
 ---
 import { formatDate, getPathFromCategory } from '~/utils'
 import { THEME_CONFIG } from '~/theme.config'
-import OpenHeart from './OpenHeart.astro'
+
 
 interface Props {
   post: Post
@@ -36,8 +36,5 @@ function getCategoryUrl(category: string) {
   <slot />
 
 </article>
-  <!-- OpenHeart component added at the end -->
-  <div class="mt-6">
-    <OpenHeart permalink={post.slug} />
-  </div>
+ 
 </>
