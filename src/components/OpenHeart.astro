@@ -1,32 +1,41 @@
 ---
-// Props to allow customization
-export interface Props {
+// OpenHeart.astro
+interface Props {
   permalink: string;
   emoji?: string;
 }
 
-// Default emoji if not provided
-const heartEmoji = emoji ?? "❤️";
-const href = `https://worker-test.josieblog.workers.dev/${permalink}`;
+const { permalink, emoji = "❤️" } = Astro.props;
 ---
-<open-heart href={href} emoji={heartEmoji}>{heartEmoji}</open-heart>
 
-<!-- Load web component -->
-<script src="https://unpkg.com/open-heart-element" type="module"></script>
 
-<!-- Initialize the component and refresh on click -->
+<open-heart href=`https://worker-test.josieblog.workers.dev/${permalink}` emoji={emoji}>{emoji}</open-heart>
+
+
+
 <script>
-window.customElements.whenDefined('open-heart').then(() => {
-  document.querySelectorAll('open-heart').forEach(oh => oh.getCount());
-});
+  // Load the web component
+  import "https://unpkg.com/open-heart-element";
 
-window.addEventListener('open-heart', (e) => {
-  if (e?.target?.getCount) e.target.getCount();
-});
+  // Initialize components when they're defined
+  window.customElements.whenDefined('open-heart').then(() => {
+    document.querySelectorAll('open-heart').forEach(heart => {
+      if ('getCount' in heart) {
+        (heart as any).getCount();
+      }
+    });
+  });
+
+  // Refresh component after click
+  window.addEventListener('open-heart', (e) => {
+    const target = e.target as any;
+    if (target?.getCount) {
+      target.getCount();
+    }
+  });
 </script>
 
 <style>
- // Open heart reaction style
     open-heart {
     margin: var(--card-padding);
     margin-top: 0;
