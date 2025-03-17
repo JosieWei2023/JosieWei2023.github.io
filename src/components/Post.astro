@@ -21,7 +21,7 @@ function getCategoryUrl(category: string) {
       <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
     </h1>
     <div class="mt-2 text-3.5">
-      <span>{t('posted_at')}</span>
+      <span>{t('posted_at')} </span>
       <time>{formatDate(post.data.pubDate)}</time>
       {
         post.data.categories &&
