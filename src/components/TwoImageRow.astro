@@ -11,11 +11,11 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
 ---
 <div class="container" role="figure" aria-label={alt}>
     <div class="image-row">
-        <div class="image-container">
+        <div class="dual-image-container">
             <img src={leftSrc} alt={`${alt} (left${leftLabel ? `: ${leftLabel}` : ''})`} />
             {leftLabel && <span class="image-label">{leftLabel}</span>}
         </div>
-        <div class="image-container">
+        <div class="dual-image-container">
             <img src={rightSrc} alt={`${alt} (right${rightLabel ? `: ${rightLabel}` : ''})`} />
             {rightLabel && <span class="image-label">{rightLabel}</span>}
         </div>
@@ -38,13 +38,13 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
     margin-bottom: 0.5rem;
 }
 
-.image-container {
+.dual-image-container {
     flex: 1;
     max-width: calc(50% - 0.25rem);
     position: relative;
 }
 
-.image-container img {
+.dual-image-container img {
     width: 100%;
     height: auto;
     display: block;
@@ -52,7 +52,7 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
     transition: transform 0.2s ease;
 }
 
-.image-container img:hover {
+.dual-image-container img:hover {
     transform: scale(1.02);
 }
 
@@ -69,11 +69,14 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
     font-size: 0.875rem;
     color: #666;
     font-style: italic;
-    text-align: center;
+    text-align: center !important;
     max-width: 80ch;
     width: 100%;
     display: block;
     box-sizing: border-box;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /* Responsive design */
@@ -83,7 +86,7 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
         gap: 1.5rem;
     }
 
-    .image-container {
+    .dual-image-container {
         max-width: 100%;
     }
     
@@ -104,7 +107,7 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-    .image-container img {
+    .dual-image-container img {
         transition: none;
     }
 }
