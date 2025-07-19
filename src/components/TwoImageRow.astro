@@ -28,6 +28,7 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
     margin: 2rem auto;
     max-width: 100%;
     text-align: center;
+    width: 100%;
 }
 
 .image-row {
@@ -63,13 +64,16 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
 }
 
 .image-alt {
-    margin-top: 0.5rem;
+    margin: 0.5rem auto 0;
+    padding: 0;
     font-size: 0.875rem;
     color: #666;
     font-style: italic;
     text-align: center;
     max-width: 80ch;
-    margin-inline: auto;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
 }
 
 /* Responsive design */
@@ -85,6 +89,8 @@ const { leftSrc, rightSrc, alt, leftLabel, rightLabel } = Astro.props;
     
     .image-alt {
         padding: 0 1rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
