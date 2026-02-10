@@ -7,10 +7,10 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  // 1. 改为全小写，避免 Linux 环境下的比对错误
+  // 1. 这里的网址必须全小写！URL 标准对此非常敏感
   site: "https://josiewei2023.github.io",
-
-  // 2. 显式声明路径结尾策略，减少 Sitemap 歧义
+  
+  // 2. 显式添加这一行，防止 sitemap 插件在生成链接时产生歧义
   trailingSlash: 'ignore',
 
   prefetch: true,
@@ -21,16 +21,21 @@ export default defineConfig({
       wrap: true,
     },
   },
+  
+  // 3. 核心修改：调整加载顺序
   integrations: [
-    // 3. mdx 必须放在最前面！让它先处理内容
+    // 第一步：先加载渲染器 (MDX)，确保页面被正确生成
     mdx(),
     
+    // 第二步：加载样式
     UnoCSS({
       injectReset: true,
     }),
     
-    // 4. sitemap 和 robotsTxt 放到最后，处理生成好的页面
+    // 第三步：所有页面生成完后，再生成 Sitemap
     sitemap(),
+    
+    // 第四步：最后生成 robots.txt (因为它引用了 sitemap)
     robotsTxt(), 
   ],
 });
