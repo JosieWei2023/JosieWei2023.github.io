@@ -6,6 +6,7 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro'
 import Pagination from '~/components/Pagination.astro'
 import Comments from '~/components/Comments.astro'
 import OpenHeart from '~/components/OpenHeart.astro'
+import MDXImage from '~/components/MDXImage.astro'
 
 export const getStaticPaths = (async ({}) => {
   const posts = await getPosts()
@@ -33,7 +34,7 @@ function getUrl(slug: string) {
 
 <LayoutDefault title={entry.data.title} desc={entry.data.description} banner={entry.data.banner}>
   <Post post={entry}>
-    <Content />
+    <Content components={{ img: MDXImage }} />
   </Post>
   <Pagination
     showLeft={Boolean(prev)}

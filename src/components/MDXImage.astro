@@ -1,0 +1,25 @@
+---
+// src/components/MDXImage.astro
+const { src, alt, title } = Astro.props;
+
+// 这里你可以随心所欲地写 Tailwind 样式
+// 比如：圆角、阴影、居中、甚至加载动画
+---
+
+<figure class="my-8 flex flex-col items-center justify-center">
+  {/* 图片本体：加上圆角(rounded-lg)和阴影(shadow-md) */}
+  <img 
+    src={src} 
+    alt={alt} 
+    class="rounded-lg shadow-md max-w-full h-auto transition-transform duration-300 hover:scale-[1.01]"
+    loading="lazy" 
+    decoding="async"
+  />
+  
+  {/* 魔法部分：如果 Markdown 里写了 title，这里会自动渲染成图注 */}
+  {title && (
+    <figcaption class="mt-2 text-sm text-gray-500 italic text-center">
+      {title}
+    </figcaption>
+  )}
+</figure>
