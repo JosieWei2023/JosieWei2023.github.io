@@ -33,9 +33,9 @@ export default defineConfig({
     }),
     
     // 第三步：所有页面生成完后，再生成 Sitemap
-    sitemap(),
+    // sitemap(),
     
     // 第四步：最后生成 robots.txt (因为它引用了 sitemap)
-    robotsTxt(), 
+    // robotsTxt(), 
   ],
 });
