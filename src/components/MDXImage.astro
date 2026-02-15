@@ -2,24 +2,26 @@
 // src/components/MDXImage.astro
 const { src, alt, title } = Astro.props;
 
-// 这里你可以随心所欲地写 Tailwind 样式
-// 比如：圆角、阴影、居中、甚至加载动画
+// 核心修改：如果没写 title，就用 alt 当作图注。
+// 为了防止 PicList 默认生成的 "image" 或者 "图片" 显示在底下，我们可以加个判断过滤掉无意义的词。
+const isDefaultAlt = alt === 'image' || alt === '图片';
+const caption = title || (isDefaultAlt ? null : alt);
 ---
 
 <figure class="my-8 flex flex-col items-center justify-center">
-  {/* 图片本体：加上圆角(rounded-lg)和阴影(shadow-md) */}
   <img 
     src={src} 
     alt={alt} 
+    title={title}
     class="rounded-lg shadow-md max-w-full h-auto transition-transform duration-300 hover:scale-[1.01]"
     loading="lazy" 
     decoding="async"
   />
   
-  {/* 魔法部分：如果 Markdown 里写了 title，这里会自动渲染成图注 */}
-  {title && (
+  {/* 现在，只要 caption 有值，就会显示图注 */}
+  {caption && (
     <figcaption class="mt-2 text-sm text-gray-500 italic text-center">
-      {title}
+      {caption}
     </figcaption>
   )}
 </figure>
