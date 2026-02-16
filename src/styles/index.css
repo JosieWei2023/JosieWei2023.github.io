@@ -129,3 +129,31 @@ article.heti blockquote p {
   height: auto;
   margin: 20px;
 }
+
+/* =========================================
+   强制修复 Markdown 文章内容的标题层级
+   ========================================= */
+
+article.heti h1 {
+  font-size: 1.875rem !important; /* 大约 30px */
+  font-weight: 700 !important;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+article.heti h2 {
+  font-size: 1.5rem !important; /* 大约 24px */
+  font-weight: 700 !important;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb; /* 加一条浅灰色下划线，让结构更清晰 */
+  padding-bottom: 0.3rem;
+}
+
+article.heti h3 {
+  font-size: 1.25rem !important; /* 大约 20px，这下绝对比正文大啦！ */
+  font-weight: 600 !important;
+  color: #374151; /* 颜色稍微深一点，增加对比度 */
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
