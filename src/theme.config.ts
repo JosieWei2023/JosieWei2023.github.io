@@ -6,7 +6,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
   /** website description */
   desc: "生活再也奴役不了我，我将被风吹成紫红的黄昏",
   /** your deployed domain */
-  website: "damao.ca",
+  website: "https://damao.ca",
   /** your locale */
   locale: "en-us",
   /** theme style */
