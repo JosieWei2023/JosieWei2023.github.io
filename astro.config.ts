@@ -8,7 +8,7 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   // 1. 这里的网址必须全小写！URL 标准对此非常敏感
-  site: "https://josiewei2023.github.io",
+  site: "https://damao.ca", 
   
   // 2. 显式添加这一行，防止 sitemap 插件在生成链接时产生歧义
   trailingSlash: 'ignore',

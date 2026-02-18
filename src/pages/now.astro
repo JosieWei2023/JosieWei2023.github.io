@@ -1,0 +1,97 @@
+---
+// src/pages/now.astro
+
+// 【注意】如果你的项目没有配置 "~" 别名，这里建议用相对路径 "../"
+import LayoutDefault from "../layouts/LayoutDefault.astro";
+
+// 1. NeoDB 用户名（建议去掉 @ 和后面的域名，只留纯用户名）
+const neodbUser = 'maoware'; 
+
+// 2. 初始化数据
+let recentMovies = [];
+let recentBooks = [];
+
+// 3. 抓取逻辑
+try {
+  // 抓取最近看过的电影 (category=movie)
+  const movieRes = await fetch(`https://neodb.social/api/user/${neodbUser}/catalog/fetch?category=movie`);
+  if (movieRes.ok) {
+    const movieData = await movieRes.json();
+    // 加上 ?. 防止数据为空时报错
+    recentMovies = movieData?.data?.slice(0, 3) || []; 
+  }
+
+  // 抓取最近看过的书 (category=book)
+  const bookRes = await fetch(`https://neodb.social/api/user/${neodbUser}/catalog/fetch?category=book`);
+  if (bookRes.ok) {
+    const bookData = await bookRes.json();
+    recentBooks = bookData?.data?.slice(0, 3) || [];
+  }
+} catch (error) {
+  console.error("无法连接到 NeoDB，请检查用户名或网络", error);
+}
+
+// 自动获取构建日期
+const lastModified = new Date().toISOString().split('T')[0];
+---
+
+<LayoutDefault >
+  <article class="heti prose mx-auto">
+    <h1>Now</h1>
+    <p class="text-gray-500 italic">
+      这是我的 <a href="/about" class="underline hover:text-blue-600">Now 页面</a>。最后更新于：{lastModified}
+    </p>
+    
+    <h3>📍 当前状态</h3>
+    <ul>
+      <li><strong>坐标：</strong> 加拿大，温哥华。</li>
+      <li><strong>生活：</strong> 驾照必须要去更新了，但是光想想各种手续和流程就好累 😫，无限期拖延中。</li>
+      <li><strong>爱好：</strong> 在努力死磕抱石（Bouldering），另外最近沉迷养克菲尔（Kefir）菌苗。</li>
+    </ul>
+
+    {/* 只有当抓取到电影数据时才显示这个模块，防止空白 */}
+    {recentMovies.length > 0 && (
+      <>
+        <h3>🎬 最近在看</h3>
+        <div class="grid grid-cols-3 gap-4 my-4">
+          {recentMovies.map((item) => (
+            <a href={`https://neodb.social${item.item.url}`} target="_blank" class="flex flex-col items-center normal group">
+              <img 
+                src={item.item.cover_image_url} 
+                alt={item.item.title} 
+                class="w-full h-auto rounded shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:-translate-y-1" 
+                loading="lazy"
+              />
+              <span class="text-xs mt-2 text-center leading-tight text-gray-600 group-hover:text-black">
+                {item.item.title}
+              </span>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+
+    {recentBooks.length > 0 && (
+      <>
+        <h3>📚 最近在读</h3>
+        <ul class="my-4 space-y-2">
+          {recentBooks.map((item) => (
+            <li class="flex items-center">
+              <span class="mr-2">📖</span>
+              <a href={`https://neodb.social${item.item.url}`} target="_blank" class="hover:underline">
+                {item.item.title}
+              </a>
+              {/* 如果有评分才显示 */}
+              {item.rating > 0 && (
+                <span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">
+                  {item.rating}/10
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+    
+  </article>
+</LayoutDefault>

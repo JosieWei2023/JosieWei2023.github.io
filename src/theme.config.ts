@@ -2,21 +2,21 @@ export const THEME_CONFIG: App.Locals["config"] = {
   /** blog title */
   title: "Footprints on the Moon",
   /** your name */
-  author: "空心菜菜子",
+  author: "伊丽莎白猫",
   /** website description */
   desc: "生活再也奴役不了我，我将被风吹成紫红的黄昏",
   /** your deployed domain */
-  website: "https://josiewei2023.github.io/",
+  website: "damao.ca",
   /** your locale */
   locale: "en-us",
   /** theme style */
   themeStyle: "light",
   /** your socials */
   socials: [
-    {
-      name: "github",
-      href: "https://github.com/JosieWei2023",
-    },
+    //{
+      //name: "github",
+      //href: "https://github.com/JosieWei2023",
+    //},
     {
       name: "rss",
       href: "/atom.xml",
@@ -32,7 +32,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
   ],
   /** your header info */
   header: {
-    twitter: "@kongxincainaizi",
+    twitter: "@damao",
   },
   /** your navigation links */
   navs: [
@@ -48,6 +48,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
       name: "Categories",
       href: "/categories",
     },
+    { name: 'Now', href: '/now' },
     // {
     //   name: "Friends",
     //   href: "/friends",
