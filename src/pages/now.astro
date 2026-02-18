@@ -1,38 +1,8 @@
 ---
 // src/pages/now.astro
+import LayoutDefault from "~/layouts/LayoutDefault.astro";
 
-// 【注意】如果你的项目没有配置 "~" 别名，这里建议用相对路径 "../"
-import LayoutDefault from "../layouts/LayoutDefault.astro";
-
-// 1. NeoDB 用户名（建议去掉 @ 和后面的域名，只留纯用户名）
-const neodbUser = 'maoware'; 
-
-// 2. 初始化数据
-// 加上 : any[] 就是告诉 TS “别管里面是啥，放过我”
-let recentMovies: any[] = [];
-let recentBooks: any[] = [];
-
-// 3. 抓取逻辑
-try {
-  // 抓取最近看过的电影 (category=movie)
-  const movieRes = await fetch(`https://neodb.social/api/user/${neodbUser}/catalog/fetch?category=movie`);
-  if (movieRes.ok) {
-    const movieData = await movieRes.json();
-    // 加上 ?. 防止数据为空时报错
-    recentMovies = movieData?.data?.slice(0, 3) || []; 
-  }
-
-  // 抓取最近看过的书 (category=book)
-  const bookRes = await fetch(`https://neodb.social/api/user/${neodbUser}/catalog/fetch?category=book`);
-  if (bookRes.ok) {
-    const bookData = await bookRes.json();
-    recentBooks = bookData?.data?.slice(0, 3) || [];
-  }
-} catch (error) {
-  console.error("无法连接到 NeoDB，请检查用户名或网络", error);
-}
-
-// 自动获取构建日期
+// 自动获取构建日期（这个还是保留）
 const lastModified = new Date().toISOString().split('T')[0];
 ---
 
@@ -44,55 +14,86 @@ const lastModified = new Date().toISOString().split('T')[0];
     </p>
     
     <h3>📍 当前状态</h3>
+
     <ul>
-      <li><strong>坐标：</strong> 加拿大，温哥华。</li>
-      <li><strong>生活：</strong> 驾照必须要去更新了，但是光想想各种手续和流程就好累 😫，无限期拖延中。</li>
-      <li><strong>爱好：</strong> 在努力死磕抱石（Bouldering），另外最近沉迷养克菲尔（Kefir）菌苗。</li>
+
+      <li><strong>坐标：</strong> 加拿大</li>
+
+      <li><strong>生活：</strong> 拿到加拿大永居，正在办理各种文件和手续，顺便研究能不能薅羊毛报销一些培训费用。</li>
+
+      <li><strong>爱好：</strong> 年初硬拉不小心伤到了腰，正在做康复性训练。最近沉迷Kefir发酵酸奶</li>
+
     </ul>
 
-    {/* 只有当抓取到电影数据时才显示这个模块，防止空白 */}
-    {recentMovies.length > 0 && (
-      <>
-        <h3>🎬 最近在看</h3>
-        <div class="grid grid-cols-3 gap-4 my-4">
-          {recentMovies.map((item) => (
-            <a href={`https://neodb.social${item.item.url}`} target="_blank" class="flex flex-col items-center normal group">
-              <img 
-                src={item.item.cover_image_url} 
-                alt={item.item.title} 
-                class="w-full h-auto rounded shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:-translate-y-1" 
-                loading="lazy"
-              />
-              <span class="text-xs mt-2 text-center leading-tight text-gray-600 group-hover:text-black">
-                {item.item.title}
-              </span>
-            </a>
-          ))}
-        </div>
-      </>
-    )}
+    <h3>🎬 最近在看</h3>
+    <div id="movie-container" class="grid grid-cols-3 gap-4 my-4 min-h-[100px]">
+      <div class="col-span-3 text-gray-400 text-sm text-center py-4">正在从 NeoDB 加载数据...</div>
+    </div>
 
-    {recentBooks.length > 0 && (
-      <>
-        <h3>📚 最近在读</h3>
-        <ul class="my-4 space-y-2">
-          {recentBooks.map((item) => (
-            <li class="flex items-center">
-              <span class="mr-2">📖</span>
-              <a href={`https://neodb.social${item.item.url}`} target="_blank" class="hover:underline">
-                {item.item.title}
-              </a>
-              {/* 如果有评分才显示 */}
-              {item.rating > 0 && (
-                <span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">
-                  {item.rating}/10
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      </>
-    )}
-    
+    <h3>📚 最近在读</h3>
+    <ul id="book-container" class="my-4 space-y-2 min-h-[50px]">
+      <li class="text-gray-400 text-sm">正在加载书单...</li>
+    </ul>
+
   </article>
 </LayoutDefault>
+
+<script is:inline>
+  // 你的 NeoDB 用户名
+  const NEODB_USER = 'maoware';
+
+  async function fetchNeoDB() {
+    try {
+      // 1. 抓取电影
+      const movieRes = await fetch(`https://neodb.social/api/user/${NEODB_USER}/catalog/fetch?category=movie`);
+      const movieData = await movieRes.json();
+      
+      // 渲染电影
+      const movieContainer = document.getElementById('movie-container');
+      if (movieData.data && movieData.data.length > 0) {
+        movieContainer.innerHTML = movieData.data.slice(0, 3).map(item => `
+          <a href="https://neodb.social${item.item.url}" target="_blank" class="flex flex-col items-center group text-decoration-none" style="text-decoration: none;">
+            <img 
+              src="${item.item.cover_image_url}" 
+              alt="${item.item.title}" 
+              class="w-full h-auto rounded shadow-sm group-hover:shadow-md transition-all duration-300" 
+              style="aspect-ratio: 2/3; object-fit: cover;"
+            />
+            <span class="text-xs mt-2 text-center leading-tight text-gray-600 group-hover:text-black">
+              ${item.item.title}
+            </span>
+          </a>
+        `).join('');
+      } else {
+        movieContainer.innerHTML = '<div class="col-span-3 text-sm text-gray-400">最近没有标记看过的电影</div>';
+      }
+
+      // 2. 抓取书籍
+      const bookRes = await fetch(`https://neodb.social/api/user/${NEODB_USER}/catalog/fetch?category=book`);
+      const bookData = await bookRes.json();
+
+      // 渲染书籍
+      const bookContainer = document.getElementById('book-container');
+      if (bookData.data && bookData.data.length > 0) {
+        bookContainer.innerHTML = bookData.data.slice(0, 3).map(item => `
+          <li class="flex items-center">
+            <span class="mr-2">📖</span>
+            <a href="https://neodb.social${item.item.url}" target="_blank" class="hover:underline">
+              ${item.item.title}
+            </a>
+            ${item.rating ? `<span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">${item.rating}/10</span>` : ''}
+          </li>
+        `).join('');
+      } else {
+        bookContainer.innerHTML = '<li class="text-sm text-gray-400">最近没有标记读过的书</li>';
+      }
+
+    } catch (error) {
+      console.error('NeoDB Fetch Error:', error);
+      document.getElementById('movie-container').innerHTML = '<div class="col-span-3 text-red-500 text-sm">加载失败，请检查控制台</div>';
+    }
+  }
+
+  // 页面加载完成后立即执行
+  fetchNeoDB();
+</script>
