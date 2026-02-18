@@ -2,7 +2,43 @@
 // src/pages/now.astro
 import LayoutDefault from "~/layouts/LayoutDefault.astro";
 
-// 自动获取构建日期（这个还是保留）
+// 1. 你的 NeoDB Token (直接从你提供的代码里拿过来的)
+// 注意：这个 Token 拥有你的账户权限，不要泄露给别人
+const AUTH_TOKEN = import.meta.env.NEODB_TOKEN;
+
+if (!AUTH_TOKEN) {
+  console.error("❌ 警告：未找到 NEODB_TOKEN 环境变量，NeoDB 数据将无法加载！");
+}
+
+// 2. 抓取数据的通用函数 (使用 api/me 接口，最稳！)
+async function fetchNeoDB(category: string) {
+  try {
+    const res = await fetch(`https://neodb.social/api/me/shelf/fetch?category=${category}&limit=3`, {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`, // 带着身份证去敲门
+        Accept: 'application/json',
+      },
+    });
+    
+    if (!res.ok) {
+        console.error(`NeoDB fetch failed for ${category}: ${res.statusText}`);
+        return [];
+    }
+    
+    const json = await res.json();
+    return json.data || [];
+  } catch (error) {
+    console.error(`NeoDB error for ${category}:`, error);
+    return [];
+  }
+}
+
+// 3. 在构建时直接抓取数据
+// 因为用了 api/me 接口，系统会自动识别这个 Token 属于谁，不用填用户名
+const recentMovies = await fetchNeoDB('movie');
+const recentBooks = await fetchNeoDB('book');
+
+// 自动获取构建日期
 const lastModified = new Date().toISOString().split('T')[0];
 ---
 
@@ -14,95 +50,62 @@ const lastModified = new Date().toISOString().split('T')[0];
     </p>
     
     <h3>📍 当前状态</h3>
-
     <ul>
-
-      <li><strong>坐标：</strong> 加拿大</li>
-
-      <li><strong>生活：</strong> 拿到加拿大永居，正在办理各种文件和手续，顺便研究能不能薅羊毛报销一些培训费用。</li>
-
-      <li><strong>爱好：</strong> 年初硬拉不小心伤到了腰，正在做康复性训练。最近沉迷Kefir发酵酸奶</li>
-
+      <li><strong>坐标</strong> 加拿大</li>
+      <li><strong>生活</strong> 永居到手，正在陆续办理各种文件和手续。</li>
+      <li><strong>爱好</strong> 抱石 (Bouldering) & 克菲尔 (Kefir) 发酵。</li>
     </ul>
 
-    <h3>🎬 最近在看</h3>
-    <div id="movie-container" class="grid grid-cols-3 gap-4 my-4 min-h-[100px]">
-      <div class="col-span-3 text-gray-400 text-sm text-center py-4">正在从 NeoDB 加载数据...</div>
-    </div>
+    {/* 电影板块 */}
+    {recentMovies.length > 0 && (
+      <>
+        <h3>🎬 最近在看</h3>
+        <div class="grid grid-cols-3 gap-4 my-4">
+          {recentMovies.map((record: any) => (
+            <a href={`https://neodb.social${record.item.url}`} target="_blank" class="flex flex-col items-center group normal">
+              <div class="relative w-full aspect-[2/3] overflow-hidden rounded shadow-sm group-hover:shadow-md transition-all">
+                <img 
+                  src={record.item.cover_image_url} 
+                  alt={record.item.title} 
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                />
+              </div>
+              <span class="text-xs mt-2 text-center leading-tight text-gray-600 group-hover:text-black">
+                {record.item.title}
+              </span>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
 
-    <h3>📚 最近在读</h3>
-    <ul id="book-container" class="my-4 space-y-2 min-h-[50px]">
-      <li class="text-gray-400 text-sm">正在加载书单...</li>
-    </ul>
-
+    {/* 书籍板块 */}
+    {recentBooks.length > 0 && (
+      <>
+        <h3>📚 最近在读</h3>
+        <ul class="my-4 space-y-2">
+          {recentBooks.map((record: any) => (
+            <li class="flex items-center">
+              <span class="mr-2">📖</span>
+              <a href={`https://neodb.social${record.item.url}`} target="_blank" class="hover:underline text-gray-800">
+                {record.item.title}
+              </a>
+              {/* 如果有评分就显示 */}
+              {record.rating_grade && (
+                <span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">
+                  {record.rating_grade}/10
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+    
+    {/* 如果都没有数据，显示提示 */}
+    {recentMovies.length === 0 && recentBooks.length === 0 && (
+       <p class="text-gray-400 text-sm italic">暂时无法获取 NeoDB 数据，请稍后再试。</p>
+    )}
+    
   </article>
 </LayoutDefault>
-
-<script is:inline>
-// 你的 NeoDB 用户名
-  const NEODB_USER = 'maoware';
-
-  async function fetchNeoDB() {
-    try {
-      // 🎬 1. 抓取电影 (使用 v1/shelf/complete 接口)
-      const movieRes = await fetch(`https://neodb.social/api/v1/user/${NEODB_USER}/shelf/complete?category=movie&page=1`);
-      
-      if (!movieRes.ok) throw new Error('电影接口连接失败');
-      
-      const movieData = await movieRes.json();
-      
-      // 渲染电影
-      const movieContainer = document.getElementById('movie-container');
-      if (movieData.data && movieData.data.length > 0) {
-        movieContainer.innerHTML = movieData.data.slice(0, 3).map(record => `
-          <a href="https://neodb.social${record.item.url}" target="_blank" class="flex flex-col items-center group text-decoration-none" style="text-decoration: none;">
-            <img 
-              src="${record.item.cover_image_url}" 
-              alt="${record.item.title}" 
-              class="w-full h-auto rounded shadow-sm group-hover:shadow-md transition-all duration-300" 
-              style="aspect-ratio: 2/3; object-fit: cover;"
-            />
-            <span class="text-xs mt-2 text-center leading-tight text-gray-600 group-hover:text-black">
-              ${record.item.title}
-            </span>
-          </a>
-        `).join('');
-      } else {
-        movieContainer.innerHTML = '<div class="col-span-3 text-sm text-gray-400 text-center">最近没有标记看过的电影</div>';
-      }
-
-      // 📚 2. 抓取书籍 (使用 v1/shelf/complete 接口)
-      const bookRes = await fetch(`https://neodb.social/api/v1/user/${NEODB_USER}/shelf/complete?category=book&page=1`);
-      
-      if (!bookRes.ok) throw new Error('书籍接口连接失败');
-
-      const bookData = await bookRes.json();
-
-      // 渲染书籍
-      const bookContainer = document.getElementById('book-container');
-      if (bookData.data && bookData.data.length > 0) {
-        bookContainer.innerHTML = bookData.data.slice(0, 3).map(record => `
-          <li class="flex items-center">
-            <span class="mr-2">📖</span>
-            <a href="https://neodb.social${record.item.url}" target="_blank" class="hover:underline text-gray-800">
-              ${record.item.title}
-            </a>
-            ${record.rating_grade ? `<span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">${record.rating_grade}/10</span>` : ''}
-          </li>
-        `).join('');
-      } else {
-        bookContainer.innerHTML = '<li class="text-sm text-gray-400">最近没有标记读过的书</li>';
-      }
-
-    } catch (error) {
-      console.error('NeoDB Fetch Error:', error);
-      // 只有在真的出错时才显示红字
-      const errorHtml = '<div class="col-span-3 text-red-400 text-xs text-center">数据加载遇到了一点小问题，请稍后再试</div>';
-      if(document.getElementById('movie-container')) document.getElementById('movie-container').innerHTML = errorHtml;
-      if(document.getElementById('book-container')) document.getElementById('book-container').innerHTML = '<li class="text-red-400 text-xs">加载失败</li>';
-    }
-  }
-
-  // 页面加载完成后立即执行
-  fetchNeoDB();
-</script>

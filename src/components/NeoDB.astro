@@ -6,8 +6,11 @@ interface Props {
 
 const { dbUrl } = Astro.props;
 const API_URL = "https://neodb.social/api/me/shelf/item/";
-const authToken = "DJZA3gPzZnvJhbT9_1-VzVhM-XW4T4G3SRz8zeH5VaJ-DAlYS1I7Sjmg4A"
+const AUTH_TOKEN = import.meta.env.NEODB_TOKEN;
 
+if (!AUTH_TOKEN) {
+  console.error("❌ 警告：未找到 NEODB_TOKEN 环境变量，NeoDB 数据将无法加载！");
+}
 // Extract item_uuid from the URL
 const itemUuidMatch = dbUrl.match(/.*neodb\.social\/.*\/(.*)/);
 if (!itemUuidMatch) {
