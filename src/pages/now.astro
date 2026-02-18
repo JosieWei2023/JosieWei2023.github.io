@@ -3,31 +3,34 @@
 import LayoutDefault from "~/layouts/LayoutDefault.astro";
 
 
-const AUTH_TOKEN = import.meta.env.NEODB_TOKEN;
+// 1. 获取 Token (加了 process.env 双重保险，绝对读得到)
+const AUTH_TOKEN = import.meta.env.NEODB_TOKEN || process.env.NEODB_TOKEN;
 
 if (!AUTH_TOKEN) {
-  console.error("❌ 警告：未找到 NEODB_TOKEN 环境变量，NeoDB 数据将无法加载！");
+  console.error("❌ 警告：未找到 NEODB_TOKEN 环境变量，请检查 GitHub Secrets！");
 }
 
-// 2. 抓取数据的通用函数 (使用 api/me 接口，最稳！)
+// 2. 抓取数据的通用函数
 async function fetchNeoDB(category: string) {
   try {
-    const res = await fetch(`https://neodb.social/api/me/shelf/fetch?category=${category}&limit=3`, {
+    // 🚨 修正：把 /fetch 换成了 /complete (代表已看/已读的书架)，并加上了 page=1
+    const res = await fetch(`https://neodb.social/api/me/shelf/complete?category=${category}&page=1`, {
       headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`, 
+        Authorization: `Bearer ${AUTH_TOKEN}`,
         Accept: 'application/json',
       },
     });
     
     if (!res.ok) {
-        console.error(`NeoDB fetch failed for ${category}: ${res.statusText}`);
+        console.error(`NeoDB 抓取失败 (${category}): HTTP ${res.status}`);
         return [];
     }
     
     const json = await res.json();
-    return json.data || [];
+    // 拿到数据后，只截取前 3 个展示
+    return json.data ? json.data.slice(0, 3) : [];
   } catch (error) {
-    console.error(`NeoDB error for ${category}:`, error);
+    console.error(`NeoDB 请求出错 (${category}):`, error);
     return [];
   }
 }
