@@ -2,8 +2,7 @@
 // src/pages/now.astro
 import LayoutDefault from "~/layouts/LayoutDefault.astro";
 
-// 1. 你的 NeoDB Token (直接从你提供的代码里拿过来的)
-// 注意：这个 Token 拥有你的账户权限，不要泄露给别人
+
 const AUTH_TOKEN = import.meta.env.NEODB_TOKEN;
 
 if (!AUTH_TOKEN) {
@@ -15,7 +14,7 @@ async function fetchNeoDB(category: string) {
   try {
     const res = await fetch(`https://neodb.social/api/me/shelf/fetch?category=${category}&limit=3`, {
       headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`, // 带着身份证去敲门
+        Authorization: `Bearer ${AUTH_TOKEN}`, 
         Accept: 'application/json',
       },
     });
