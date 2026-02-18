@@ -5,13 +5,13 @@ import type { APIContext } from "astro";
 import sanitizeHtml from "sanitize-html";
 import MarkdownIt from "markdown-it";
 
-const parser = new MarkdownIt();
+// const parser = new MarkdownIt();
 
 const { title, desc, website, author } = THEME_CONFIG;
 
 export async function GET(_context: APIContext) {
   const posts = await getPosts();
-  const allowedTags = sanitizeHtml.defaults.allowedTags.concat(["img"]);
+  // const allowedTags = sanitizeHtml.defaults.allowedTags.concat(["img"]);
   return rss({
     title: title,
     description: desc,

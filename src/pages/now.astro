@@ -8,8 +8,9 @@ import LayoutDefault from "../layouts/LayoutDefault.astro";
 const neodbUser = 'maoware'; 
 
 // 2. 初始化数据
-let recentMovies = [];
-let recentBooks = [];
+// 加上 : any[] 就是告诉 TS “别管里面是啥，放过我”
+let recentMovies: any[] = [];
+let recentBooks: any[] = [];
 
 // 3. 抓取逻辑
 try {
