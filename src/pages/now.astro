@@ -39,49 +39,55 @@ const lastModified = new Date().toISOString().split('T')[0];
 </LayoutDefault>
 
 <script is:inline>
-  // 你的 NeoDB 用户名
+// 你的 NeoDB 用户名
   const NEODB_USER = 'maoware';
 
   async function fetchNeoDB() {
     try {
-      // 1. 抓取电影
-      const movieRes = await fetch(`https://neodb.social/api/user/${NEODB_USER}/catalog/fetch?category=movie`);
+      // 🎬 1. 抓取电影 (使用 v1/shelf/complete 接口)
+      const movieRes = await fetch(`https://neodb.social/api/v1/user/${NEODB_USER}/shelf/complete?category=movie&page=1`);
+      
+      if (!movieRes.ok) throw new Error('电影接口连接失败');
+      
       const movieData = await movieRes.json();
       
       // 渲染电影
       const movieContainer = document.getElementById('movie-container');
       if (movieData.data && movieData.data.length > 0) {
-        movieContainer.innerHTML = movieData.data.slice(0, 3).map(item => `
-          <a href="https://neodb.social${item.item.url}" target="_blank" class="flex flex-col items-center group text-decoration-none" style="text-decoration: none;">
+        movieContainer.innerHTML = movieData.data.slice(0, 3).map(record => `
+          <a href="https://neodb.social${record.item.url}" target="_blank" class="flex flex-col items-center group text-decoration-none" style="text-decoration: none;">
             <img 
-              src="${item.item.cover_image_url}" 
-              alt="${item.item.title}" 
+              src="${record.item.cover_image_url}" 
+              alt="${record.item.title}" 
               class="w-full h-auto rounded shadow-sm group-hover:shadow-md transition-all duration-300" 
               style="aspect-ratio: 2/3; object-fit: cover;"
             />
             <span class="text-xs mt-2 text-center leading-tight text-gray-600 group-hover:text-black">
-              ${item.item.title}
+              ${record.item.title}
             </span>
           </a>
         `).join('');
       } else {
-        movieContainer.innerHTML = '<div class="col-span-3 text-sm text-gray-400">最近没有标记看过的电影</div>';
+        movieContainer.innerHTML = '<div class="col-span-3 text-sm text-gray-400 text-center">最近没有标记看过的电影</div>';
       }
 
-      // 2. 抓取书籍
-      const bookRes = await fetch(`https://neodb.social/api/user/${NEODB_USER}/catalog/fetch?category=book`);
+      // 📚 2. 抓取书籍 (使用 v1/shelf/complete 接口)
+      const bookRes = await fetch(`https://neodb.social/api/v1/user/${NEODB_USER}/shelf/complete?category=book&page=1`);
+      
+      if (!bookRes.ok) throw new Error('书籍接口连接失败');
+
       const bookData = await bookRes.json();
 
       // 渲染书籍
       const bookContainer = document.getElementById('book-container');
       if (bookData.data && bookData.data.length > 0) {
-        bookContainer.innerHTML = bookData.data.slice(0, 3).map(item => `
+        bookContainer.innerHTML = bookData.data.slice(0, 3).map(record => `
           <li class="flex items-center">
             <span class="mr-2">📖</span>
-            <a href="https://neodb.social${item.item.url}" target="_blank" class="hover:underline">
-              ${item.item.title}
+            <a href="https://neodb.social${record.item.url}" target="_blank" class="hover:underline text-gray-800">
+              ${record.item.title}
             </a>
-            ${item.rating ? `<span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">${item.rating}/10</span>` : ''}
+            ${record.rating_grade ? `<span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">${record.rating_grade}/10</span>` : ''}
           </li>
         `).join('');
       } else {
@@ -90,7 +96,10 @@ const lastModified = new Date().toISOString().split('T')[0];
 
     } catch (error) {
       console.error('NeoDB Fetch Error:', error);
-      document.getElementById('movie-container').innerHTML = '<div class="col-span-3 text-red-500 text-sm">加载失败，请检查控制台</div>';
+      // 只有在真的出错时才显示红字
+      const errorHtml = '<div class="col-span-3 text-red-400 text-xs text-center">数据加载遇到了一点小问题，请稍后再试</div>';
+      if(document.getElementById('movie-container')) document.getElementById('movie-container').innerHTML = errorHtml;
+      if(document.getElementById('book-container')) document.getElementById('book-container').innerHTML = '<li class="text-red-400 text-xs">加载失败</li>';
     }
   }
 
