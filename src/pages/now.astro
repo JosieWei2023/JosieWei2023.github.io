@@ -1,7 +1,7 @@
 ---
 // src/pages/now.astro
 import LayoutDefault from "~/layouts/LayoutDefault.astro";
-
+import NeoDBCard from "~/components/NeoDBCard.astro";
 
 // 1. 获取 Token (加了 process.env 双重保险，绝对读得到)
 const AUTH_TOKEN = import.meta.env.NEODB_TOKEN || process.env.NEODB_TOKEN;
@@ -54,28 +54,21 @@ const lastModified = new Date().toISOString().split('T')[0];
     <h3>📍 当前状态</h3>
     <ul>
       <li><strong>坐标</strong> 加拿大</li>
-      <li><strong>生活</strong> 永居到手，正在陆续办理各种文件和手续。</li>
-      <li><strong>爱好</strong> 抱石 (Bouldering) & 克菲尔 (Kefir) 发酵。</li>
+      <li><strong>运动</strong> 年前硬拉伤到了腰椎，近期在努力做腰椎康复训练以及试图改善体态和肌肉不平衡。抱石攀岩暂停中。日常也在规律补充维 D 和镁来助眠恢复。</li>
+      <li><strong>工作</strong>拿到加拿大永居身份，正在积极寻求政府帮助，推进财务/会计相关的工作机会，同时也在自学如何打理自家水暖业务的工商和财务部分。</li>
+      <li><strong>爱好</strong> 沉迷Kefir酸奶发酵，正在努力散播Kefir Grains到四面八方</li>
+      
     </ul>
+
+    
 
     {/* 电影板块 */}
     {recentMovies.length > 0 && (
       <>
-        <h3>🎬 最近在看</h3>
-        <div class="grid grid-cols-3 gap-4 my-4">
+        <h3>🎬 最近看过</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
           {recentMovies.map((record: any) => (
-            <a href={`https://neodb.social${record.item.url}`} target="_blank" class="flex flex-col items-center group normal">
-              <div class="relative w-full aspect-[2/3] overflow-hidden rounded shadow-sm group-hover:shadow-md transition-all">
-                <img 
-                  src={record.item.cover_image_url} 
-                  alt={record.item.title} 
-                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
-                />
-              </div>
-              <span class="text-xs mt-2 text-center leading-tight text-gray-600 group-hover:text-black">
-                {record.item.title}
-              </span>
-            </a>
+            <NeoDBCard record={record} />
           ))}
         </div>
       </>
@@ -84,23 +77,12 @@ const lastModified = new Date().toISOString().split('T')[0];
     {/* 书籍板块 */}
     {recentBooks.length > 0 && (
       <>
-        <h3>📚 最近在读</h3>
-        <ul class="my-4 space-y-2">
+        <h3>📚 最近读过</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
           {recentBooks.map((record: any) => (
-            <li class="flex items-center">
-              <span class="mr-2">📖</span>
-              <a href={`https://neodb.social${record.item.url}`} target="_blank" class="hover:underline text-gray-800">
-                {record.item.title}
-              </a>
-              {/* 如果有评分就显示 */}
-              {record.rating_grade && (
-                <span class="text-xs text-gray-400 ml-2 border border-gray-200 px-1 rounded">
-                  {record.rating_grade}/10
-                </span>
-              )}
-            </li>
+            <NeoDBCard record={record} />
           ))}
-        </ul>
+        </div>
       </>
     )}
     
