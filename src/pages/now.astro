@@ -27,8 +27,8 @@ async function fetchNeoDB(category: string) {
     }
     
     const json = await res.json();
-    // 拿到数据后，只截取前 3 个展示
-    return json.data ? json.data.slice(0, 3) : [];
+    // 拿到数据后，只截取前 4 个展示
+    return json.data ? json.data.slice(0, 4) : [];
   } catch (error) {
     console.error(`NeoDB 请求出错 (${category}):`, error);
     return [];
