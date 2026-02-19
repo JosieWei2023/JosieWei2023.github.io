@@ -1,6 +1,5 @@
 ---
 // src/components/NeoDBCard.astro
-// 接收从 now.astro 传过来的单条数据 (record)
 interface Props {
   record: any;
 }
@@ -45,13 +44,21 @@ const formatDate = (dateString: string) => {
           {record.item.title}
         </a>
       </div>
+      
+      {/* --- 修改了这里：将日期和星星拆分开 --- */}
       <div class="db-card-rating">
-        {formatDate(record.created_time)} 读过/看过
-        {/* 渲染星星 (需要你的 Layout 里引入了 FontAwesome) */}
-        {[...Array(fullStars)].map(() => <i class="fa-solid fa-star"></i>)}
-        {halfStar === 1 && <i class="fa-solid fa-star-half-stroke"></i>}
-        {[...Array(emptyStars)].map(() => <i class="fa-regular fa-star"></i>)}
+        <div class="rating-date">
+            {formatDate(record.created_time)} 读过/看过
+        </div>
+        <div class="rating-stars">
+            {/* 渲染星星 */}
+            {[...Array(fullStars)].map(() => <i class="fa-solid fa-star"></i>)}
+            {halfStar === 1 && <i class="fa-solid fa-star-half-stroke"></i>}
+            {[...Array(emptyStars)].map(() => <i class="fa-regular fa-star"></i>)}
+        </div>
       </div>
+      {/* ------------------------------------ */}
+
       {record.comment_text && (
         <div class="db-card-comment">{record.comment_text}</div>
       )}
@@ -61,10 +68,9 @@ const formatDate = (dateString: string) => {
 </div>
 
 <style>
-/* 你原来的卡片样式，我稍微优化了外边距，防止在 Now 页面里撑爆 */
 .db-card {
-    margin: 1rem 0; /* 修改了这里，去掉了左右巨大的 margin */
-    background: var(--color-codebg, #f9f9f9); /* 加了个默认底色防止变量失效 */
+    margin: 1rem 0;
+    background: var(--color-codebg, #f9f9f9);
     border-radius: 7px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s ease-in-out;
@@ -84,8 +90,8 @@ const formatDate = (dateString: string) => {
 }
 .db-card-content {
     flex: 1 1 auto;
-    overflow: auto;
-    margin-top: 8px;
+    overflow: hidden; /* 防止内容溢出 */
+    margin-top: 5px;
 }
 .db-card-post {
     width: 90px;
@@ -95,10 +101,11 @@ const formatDate = (dateString: string) => {
     flex: 0 0 auto;
 }
 .db-card-title {
-    margin-bottom: 3px;
+    margin-bottom: 5px;
     font-size: 1.2rem;
     color: var(--card-text-color-main, #333);
     font-weight: bold;
+    line-height: 1.4;
 }
 .dark .db-card-title {
     color: #eee;
@@ -106,20 +113,39 @@ const formatDate = (dateString: string) => {
 .db-card-title a {
     text-decoration: none!important;
 }
+
+/* --- 修改了这里：评分区域的新样式 --- */
 .db-card-rating {
     font-size: 0.85rem;
     color: #666;
     margin-bottom: 8px;
+    display: flex;
+    flex-direction: column; /* 让日期和星星垂直排列 */
 }
-.db-card-rating i {
-    color: #f5c518; /* 给星星上个经典的 IMDB 黄色 */
-    margin: 0 1px;
+
+.rating-date {
+    margin-bottom: 2px; /* 日期和星星之间的微小间距 */
 }
+
+.rating-stars {
+    display: flex; /* 确保星星自己在同一行 */
+    align-items: center;
+    height: 20px; /* 给星星一个固定高度区域 */
+}
+
+.rating-stars i {
+    color: #f5c518;
+    margin-right: 2px; /* 星星之间的间距 */
+    font-size: 0.9rem; /* 调整星星大小 */
+}
+/* -------------------------------- */
+
 .db-card-comment {
     font-size: 0.9rem;
-    margin-top: 10px;
-    margin-bottom: 15px;
+    margin-top: 8px;
+    margin-bottom: 10px;
     color: var(--card-text-color-main, #555);
+    line-height: 1.6;
 }
 .dark .db-card-comment { color: #ccc; }
 .db-card-cate {
