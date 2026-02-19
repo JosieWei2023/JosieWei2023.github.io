@@ -8,7 +8,7 @@ on:
   # 允许你在 GitHub 上的 Actions 标签中手动触发此“工作流程”
   workflow_dispatch:
   schedule:
-    - cron: '0 8 * * *' # 对应 UTC 时间 8 点（也就是温哥华时间刚好午夜 0 点）
+    - cron: '0 8 * * 0'  # 每周日 UTC 8:00 (温哥华周日凌晨)
 
 # 允许 job 克隆 repo 并创建一个 page deployment
 permissions:
