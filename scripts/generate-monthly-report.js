@@ -6,7 +6,7 @@ const lastMonthDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 const year = lastMonthDate.getFullYear();
 const month = String(lastMonthDate.getMonth() + 1).padStart(2, '0');
 
-const outputDir = path.join(process.cwd(), 'src/content/blog');
+const outputDir = path.join(process.cwd(), 'src/content/posts');
 const fileName = `${year}-${month}-neodb-report.mdx`; 
 const filePath = path.join(outputDir, fileName);
 

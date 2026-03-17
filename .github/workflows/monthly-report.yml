@@ -6,6 +6,9 @@ on:
     - cron: '0 8 1 * *'
   workflow_dispatch: # 保留手动触发按钮
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   generate-report:
     runs-on: ubuntu-latest
@@ -32,4 +35,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "🤖 auto-generate: ${{ env.YEAR }}-${{ env.MONTH }} monthly neodb report"
-          file_pattern: 'src/content/blog/*.md'
+          file_pattern: 'src/content/blog/*.mdx'
