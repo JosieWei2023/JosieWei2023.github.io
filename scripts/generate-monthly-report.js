@@ -86,8 +86,8 @@ const generateCards = (records) => {
         const fullUrl = `https://neodb.social${record.item.url}`;
         
         // 只需要输出这一行！组件自己会搞定简介和短评的排版！
-        cardsStr += `<Neodb dbUrl="${fullUrl}" />\n\n`;
-      });
+        cardsStr += `<NeoDB dbUrl="${fullUrl}" />\n\n`;
+      }
       
       return cardsStr;
     };  
