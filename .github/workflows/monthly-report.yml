@@ -1,0 +1,35 @@
+name: Generate Monthly NeoDB Report
+
+on:
+  schedule:
+    # 每月 1 号 UTC 时间 8 点 (温哥华时间每月1号的午夜0点) 自动执行
+    - cron: '0 8 1 * *'
+  workflow_dispatch: # 保留手动触发按钮
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # 把默认的 GITHUB_TOKEN 换成你刚才生成的 PAT
+          token: ${{ secrets.PAT }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # 或者你当前用的 Node 版本
+
+      - name: Run Generate Script
+        env:
+          # 在 GitHub 仓库设置里配好你的 NeoDB Token
+          NEODB_TOKEN: ${{ secrets.NEODB_TOKEN }}
+        run: node scripts/generate-monthly-report.js
+
+      - name: Commit and Push changes
+        # 这个开源 action 会自动把脚本生成的新文件 commit 进仓库
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🤖 auto-generate: ${{ env.YEAR }}-${{ env.MONTH }} monthly neodb report"
+          file_pattern: 'src/content/blog/*.md'
