@@ -16,7 +16,9 @@ export async function GET(_context: APIContext) {
     title: title,
     description: desc,
     site: website,
-    items: posts.map((post) => {
+    items: posts
+    .filter((post) => post.data.hide_from_rss !== true)
+    .map((post) => {
       return {
         link: `/posts/${post.slug}/`,
         author: author,
