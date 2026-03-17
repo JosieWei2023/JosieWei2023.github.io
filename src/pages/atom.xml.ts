@@ -17,7 +17,7 @@ export async function GET(_context: APIContext) {
     description: desc,
     site: website,
     items: posts
-    .filter((post) => post.data.hide_from_rss !== true)
+    .filter((post) => !post.data.categories?.includes('读书笔记'))
     .map((post) => {
       return {
         link: `/posts/${post.slug}/`,
