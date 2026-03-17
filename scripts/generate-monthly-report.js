@@ -73,30 +73,24 @@ pubDate: ${today.toISOString().split('T')[0]}
 categories: ["读书笔记"]
 description: "由 GitHub Actions 自动拉取的本月读书观影总结"
 ---
-import NeoDBCard from '../src/components/NeoDBCard.astro';
+import NeoDB from '../../components/NeoDB.astro';
 
 本月一共记录了 **${monthlyRecords.length}** 笔书影音足迹！
 
 `;
 
-    const generateCards = (records) => {
+const generateCards = (records) => {
       let cardsStr = '';
+      
       records.forEach(record => {
-        const safeRecord = {
-          item: {
-            title: record.item.title,
-            cover_image_url: record.item.cover_image_url,
-            url: record.item.url,
-            category: record.item.category
-          },
-          created_time: record.created_time,
-          rating_grade: record.rating_grade,
-          comment_text: record.comment_text
-        };
-        cardsStr += `<NeoDBCard record={${JSON.stringify(safeRecord)}} />\n\n`;
+        const fullUrl = `https://neodb.social${record.item.url}`;
+        
+        // 只需要输出这一行！组件自己会搞定简介和短评的排版！
+        cardsStr += `<Neodb dbUrl="${fullUrl}" />\n\n`;
       });
+      
       return cardsStr;
-    };
+    };  
 
     if (books.length > 0) {
       mdxContent += `### 📚 本月读过\n\n`;

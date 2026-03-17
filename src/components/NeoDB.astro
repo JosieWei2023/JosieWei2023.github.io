@@ -1,5 +1,5 @@
 ---
-// NeoDB Card Component
+// NeoDB Card Component (豆瓣风重构版)
 interface Props {
   dbUrl: string;
 }
@@ -11,7 +11,7 @@ const AUTH_TOKEN = import.meta.env.NEODB_TOKEN;
 if (!AUTH_TOKEN) {
   console.error("❌ 警告：未找到 NEODB_TOKEN 环境变量, NeoDB 数据将无法加载！");
 }
-// Extract item_uuid from the URL
+
 const itemUuidMatch = dbUrl.match(/.*neodb\.social\/.*\/(.*)/);
 if (!itemUuidMatch) {
   throw new Error("Invalid URL format");
@@ -20,20 +20,16 @@ if (!itemUuidMatch) {
 const itemUuid = itemUuidMatch[1];
 const dbApiUrl = `${API_URL}${itemUuid}`;
 
-// Fetch data
 let dbData;
 try {
   const response = await fetch(dbApiUrl, {
-    headers: {
-      Authorization: `Bearer ${AUTH_TOKEN}`,
-    },
+    headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
   });
   dbData = await response.json();
 } catch (error) {
   console.error("Failed to fetch NeoDB data:", error);
 }
 
-// Calculate star rating
 const calculateStars = (rating: number) => {
   const starCount = (rating * 5) / 10;
   const fullStars = Math.floor(starCount);
@@ -44,151 +40,156 @@ const calculateStars = (rating: number) => {
 
 const { fullStars, halfStar, emptyStars } = dbData ? calculateStars(dbData.rating_grade) : { fullStars: 0, halfStar: 0, emptyStars: 5 };
 
-// Format date
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return new Intl.DateTimeFormat('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
+    year: 'numeric', month: '2-digit', day: '2-digit'
   }).format(date).replace(/\//g, '年') + '日';
 };
 ---
 
 {dbData ? (
-  <div class="db-card">
-    <div class="db-card-subject">
-      <div class="db-card-post">
-        <img 
-          src={dbData.item.cover_image_url} 
-          alt="Cover Image"
-          style="max-width: 100%; height: auto;"
-        />
-      </div>
-      <div class="db-card-content">
-        <div class="db-card-title">
-          <a href={dbUrl} class="cute" target="_blank" rel="noreferrer">
+  <div class="douban-layout">
+    {/* 1. 上半部分：官方客观信息（无卡片边框） */}
+    <div class="db-official-info">
+      <img src={dbData.item.cover_image_url} alt="Cover" class="db-cover" />
+      <div class="db-meta">
+        <div class="db-title-row">
+          <a href={dbUrl} target="_blank" rel="noreferrer" class="db-title">
             {dbData.item.title}
           </a>
+          <span class="db-cate">{dbData.item.category}</span>
         </div>
-        <div class="db-card-rating">
-          {formatDate(dbData.created_time)} 读过
-          {/* Full stars */}
-          {[...Array(fullStars)].map(() => (
-            <i class="fa-solid fa-star"></i>
-          ))}
-          {/* Half star */}
-          {halfStar === 1 && <i class="fa-regular fa-star-half-stroke"></i>}
-          {/* Empty stars */}
-          {[...Array(emptyStars)].map(() => (
-            <i class="fa-regular fa-star"></i>
-          ))}
-        </div>
+        {/* 官方简介：限制3行高度 */}
         {dbData.item.description && (
-          <div class="db-card-comment">{dbData.item.description}</div>
+          <div class="db-intro">{dbData.item.description}</div>
         )}
       </div>
-      <div class="db-card-cate">{dbData.item.category}</div>
+    </div>
+
+    {/* 2. 下半部分：个人主观短评（灰色小卡片包裹） */}
+    <div class="db-personal-review">
+      <div class="db-rating-row">
+        <span class="db-date">{formatDate(dbData.created_time)} 看过</span>
+        <span class="db-stars">
+          {[...Array(fullStars)].map(() => <i class="fa-solid fa-star"></i>)}
+          {halfStar === 1 && <i class="fa-solid fa-star-half-stroke"></i>}
+          {[...Array(emptyStars)].map(() => <i class="fa-regular fa-star"></i>)}
+        </span>
+      </div>
+      <div class="db-comment">
+        {/* 这里的 comment_text 才是你真正手打的短评！ */}
+        {dbData.comment_text || "*(本月纯打卡，未留短评)*"}
+      </div>
     </div>
   </div>
 ) : (
-  <p style="text-align: center;">
-    <small>Failed to fetch content, please check the API validity.</small>
-  </p>
+  <p style="text-align: center;"><small>Failed to fetch content.</small></p>
 )}
 
 <style>
-    /* NeoDB Card Styles */
-.db-card {
-    margin: 2.5rem 2.5rem;
-    background: var(--color-codebg);
-    border-radius: 7px;
-    box-shadow: 0 6px 10px 0 #00000053;
+/* 豆瓣风排版 CSS */
+.douban-layout {
+    margin: 2rem 0;
+    font-family: var(--font-family, sans-serif);
 }
 
-.db-card-subject {
+/* 官方信息区：左图右文 */
+.db-official-info {
     display: flex;
-    align-items: flex-start;
-    line-height: 1.6;
-    padding: 12px;
-    position: relative;
+    gap: 16px;
+    margin-bottom: 12px;
 }
 
-.dark .db-card {
-    background: var(--color-codebg);
+.db-cover {
+    width: 90px;
+    height: 125px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* 给海报加点质感 */
+    flex-shrink: 0;
 }
 
-.db-card-content {
-    flex: 1 1 auto;
-    overflow: auto;
-    margin-top: 8px;
+.db-meta {
+    flex: 1;
+    overflow: hidden;
 }
 
-.db-card-post {
-    width: 100px;
-    margin-right: 15px;
-    margin-top: 20px;
+.db-title-row {
+    margin-bottom: 8px;
     display: flex;
-    flex: 0 0 auto;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.db-card-title {
-    margin-bottom: 3px;
-    font-size: 1.6rem;
-    color: var(--card-text-color-main);
-    font-weight: bold;
+.db-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--card-text-color-main, #222);
+    text-decoration: none;
+    line-height: 1.2;
 }
 
-.db-card-title a {
-    text-decoration: none!important;
-}
-
-.db-card-rating {
-    font-size: calc(var(--article-font-size) * 0.9);
-}
-
-.db-card-comment {
-    font-size: calc(var(--article-font-size) * 0.9);
-    margin-top: 10px;
-    margin-bottom: 15px;
-    overflow: auto;
-    max-height: 150px!important;
-    color: var(--card-text-color-main);
-}
-
-.db-card-cate {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #8aa2d3;
-    padding: 1px 8px;
-    font-size: small;
-    font-style: italic;
-    border-radius: 0 8px 0 8px;
+.db-cate {
+    background: #eef1f6;
+    color: #5c75a3;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    border-radius: 4px;
     text-transform: capitalize;
 }
 
- .db-card-post img {
-    width: 100px!important;
-    height: 150px!important;
-    border-radius: 4px;
-    -o-object-fit: cover;
-    object-fit: cover;
+/* 官方简介：限制只显示 3 行 */
+.db-intro {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
+/* 个人评价区：灰色小卡片 */
+.db-personal-review {
+    background: var(--color-codebg, #f5f5f5); /* 借用你原有的变量 */
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+.db-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.db-stars i {
+    color: #f5c518;
+    font-size: 0.8rem;
+}
+
+.db-comment {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--card-text-color-main, #333);
+}
+
+/* 适配手机端 */
 @media (max-width: 600px) {
-    .db-card {
-        margin: 0.8rem 0.5rem;
+    .db-official-info {
+        gap: 12px;
     }
-    .db-card-title {
-        font-size: calc(var(--article-font-size) * 0.75);
+    .db-cover {
+        width: 75px;
+        height: 105px;
     }
-    .db-card-rating {
-      font-size: calc(var(--article-font-size) * 0.7);
-    }
-    .db-card-comment {
-      font-size: calc(var(--article-font-size) * 0.7);
+    .db-title {
+        font-size: 1.1rem;
     }
 }
-
 </style>
