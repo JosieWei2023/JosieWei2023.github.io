@@ -87,7 +87,7 @@ const generateCards = (records) => {
         
         // 只需要输出这一行！组件自己会搞定简介和短评的排版！
         cardsStr += `<NeoDB dbUrl="${fullUrl}" />\n\n`;
-      }
+      })
       
       return cardsStr;
     };  
