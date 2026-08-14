@@ -6,23 +6,20 @@ on:
     - cron: '0 8 1 * *'
   workflow_dispatch: # 保留手动触发按钮
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   generate-report:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # 把默认的 GITHUB_TOKEN 换成你刚才生成的 PAT
           token: ${{ secrets.PAT }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '18' # 或者你当前用的 Node 版本
+          node-version: '22'
 
       - name: Run Generate Script
         env:
@@ -32,7 +29,7 @@ jobs:
 
       - name: Commit and Push changes
         # 这个开源 action 会自动把脚本生成的新文件 commit 进仓库
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "🤖 auto-generate: ${{ env.YEAR }}-${{ env.MONTH }} monthly neodb report"
           file_pattern: 'src/content/posts/*.mdx'
