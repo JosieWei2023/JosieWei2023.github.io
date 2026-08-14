@@ -1,6 +1,7 @@
 ---
 // NeoDB Card Component (豆瓣风重构版)
 import { fetchNeoDBItem } from '~/utils/neodb-client.js';
+import StarRating from './StarRating.astro';
 
 interface Props {
   dbUrl: string;
@@ -10,19 +11,6 @@ const { dbUrl } = Astro.props;
 const AUTH_TOKEN = import.meta.env.NEODB_TOKEN || process.env.NEODB_TOKEN;
 const itemResult = await fetchNeoDBItem(dbUrl, AUTH_TOKEN);
 const dbData = itemResult.ok ? itemResult.data : null;
-
-const calculateStars = (rating: number) => {
-  const normalizedRating = Number.isFinite(rating)
-    ? Math.min(10, Math.max(0, rating))
-    : 0;
-  const starCount = normalizedRating / 2;
-  const fullStars = Math.floor(starCount);
-  const halfStar = normalizedRating % 2 ? 1 : 0;
-  const emptyStars = 5 - (fullStars + halfStar);
-  return { fullStars, halfStar, emptyStars };
-};
-
-const { fullStars, halfStar, emptyStars } = dbData ? calculateStars(dbData.rating_grade) : { fullStars: 0, halfStar: 0, emptyStars: 5 };
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -64,11 +52,7 @@ const formatDate = (dateString: string) => {
     <div class="db-personal-review">
       <div class="db-rating-row">
         <span class="db-date">{formatDate(dbData.created_time) || '日期未知'} 看过</span>
-        <span class="db-stars">
-          {[...Array(fullStars)].map(() => <i class="fa-solid fa-star"></i>)}
-          {halfStar === 1 && <i class="fa-solid fa-star-half-stroke"></i>}
-          {[...Array(emptyStars)].map(() => <i class="fa-regular fa-star"></i>)}
-        </span>
+        <StarRating rating={dbData.rating_grade} />
       </div>
       <div class="db-comment">
         {/* 这里的 comment_text 才是你真正手打的短评！ */}
@@ -161,11 +145,6 @@ const formatDate = (dateString: string) => {
     margin-bottom: 6px;
     font-size: 0.85rem;
     color: #888;
-}
-
-.db-stars i {
-    color: #f5c518;
-    font-size: 0.8rem;
 }
 
 .db-comment {

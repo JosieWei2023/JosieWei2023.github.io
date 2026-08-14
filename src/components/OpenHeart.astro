@@ -14,25 +14,7 @@ const workerUrl = `https://worker-test.josieblog.workers.dev/${permalink}`;
 </div>
 
 <script>
-  // Load the web component
-  import "https://unpkg.com/open-heart-element";
-
-  // Initialize components when they're defined
-  window.customElements.whenDefined('open-heart').then(() => {
-    document.querySelectorAll('open-heart').forEach(heart => {
-      if ('getCount' in heart) {
-        (heart as any).getCount();
-      }
-    });
-  });
-
-  // Refresh component after click
-  window.addEventListener('open-heart', (e) => {
-    const target = e.target as any;
-    if (target?.getCount) {
-      target.getCount();
-    }
-  });
+  import './open-heart-element.js';
 </script>
 
 <style>

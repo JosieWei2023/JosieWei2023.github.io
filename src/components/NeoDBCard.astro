@@ -1,24 +1,12 @@
 ---
 // src/components/NeoDBCard.astro
+import StarRating from './StarRating.astro';
+
 interface Props {
   record: any;
 }
 
 const { record } = Astro.props;
-
-// 计算星星数量
-const calculateStars = (rating: number) => {
-  const normalizedRating = Number.isFinite(rating)
-    ? Math.min(10, Math.max(0, rating))
-    : 0;
-  const starCount = normalizedRating / 2;
-  const fullStars = Math.floor(starCount);
-  const halfStar = normalizedRating % 2 ? 1 : 0;
-  const emptyStars = 5 - (fullStars + halfStar);
-  return { fullStars, halfStar, emptyStars };
-};
-
-const { fullStars, halfStar, emptyStars } = calculateStars(record?.rating_grade);
 
 // 格式化日期
 const formatDate = (dateString: string) => {
@@ -58,10 +46,7 @@ const formatDate = (dateString: string) => {
             {formatDate(record.created_time)} 读过/看过
         </div>
         <div class="rating-stars">
-            {/* 渲染星星 */}
-            {[...Array(fullStars)].map(() => <i class="fa-solid fa-star"></i>)}
-            {halfStar === 1 && <i class="fa-solid fa-star-half-stroke"></i>}
-            {[...Array(emptyStars)].map(() => <i class="fa-regular fa-star"></i>)}
+            <StarRating rating={record.rating_grade} />
         </div>
       </div>
       {/* ------------------------------------ */}
@@ -139,13 +124,6 @@ const formatDate = (dateString: string) => {
     align-items: center;
     height: 20px; /* 给星星一个固定高度区域 */
 }
-
-.rating-stars i {
-    color: #f5c518;
-    margin-right: 2px; /* 星星之间的间距 */
-    font-size: 0.9rem; /* 调整星星大小 */
-}
-/* -------------------------------- */
 
 .db-card-comment {
     font-size: 0.9rem;

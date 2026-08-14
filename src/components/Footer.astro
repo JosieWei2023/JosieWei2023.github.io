@@ -7,6 +7,26 @@ const { ...attrs } = Astro.props
 
 const year = new Date().getFullYear()
 
+const startDate = new Date(2024, 4, 16)
+const currentDate = new Date()
+let years = currentDate.getFullYear() - startDate.getFullYear()
+let months = currentDate.getMonth() - startDate.getMonth()
+let days = currentDate.getDate() - startDate.getDate()
+
+if (days < 0) {
+  months -= 1
+  days += new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate()
+}
+
+if (months < 0) {
+  years -= 1
+  months += 12
+}
+
+const runtime = years > 0
+  ? `${years} year ${months} months`
+  : `${months} months ${days} days`
+
 const { website, author } = Astro.locals.config
 ---
 
@@ -16,7 +36,7 @@ const { website, author } = Astro.locals.config
     <a target="_blank" href={website} rel="noopener noreferrer">{author}</a>
   </p>
   <p>
-    This site has been running for <span id="runningdays">calculating...</span>
+    This site has been running for <span>{runtime}</span>
   </p>
   <p>
     Theme
@@ -28,58 +48,3 @@ const { website, author } = Astro.locals.config
     <a target="_blank" href="https://astro.build" rel="noopener noreferrer">Astro</a>
   </p>
 </footer>
-
-<script>
-  function calculateRuntime() {
-    const startDate = new Date('2024/5/16'); // Your website start date
-    const currentDate = new Date();
-    
-    // Calculate years, months, and days
-    let years = currentDate.getFullYear() - startDate.getFullYear();
-    let months = currentDate.getMonth() - startDate.getMonth();
-    let days = currentDate.getDate() - startDate.getDate();
-    
-    // Adjust for negative days
-    if (days < 0) {
-      months -= 1;
-      // Get last day of previous month
-      const lastDay = new Date(
-        currentDate.getFullYear(), 
-        currentDate.getMonth(), 
-        0
-      ).getDate();
-      days += lastDay;
-    }
-    
-    // Adjust for negative months
-    if (months < 0) {
-      years -= 1;
-      months += 12;
-    }
-    
-    // Format the result, only including years if greater than 0
-    let result = '';
-    if (years > 0) {
-      result = `${years} year ${months} months`;
-    } else {
-      result = `${months} months ${days} days`;
-    }
-    
-    // Update the display
-    const element = document.getElementById('runningdays');
-    if (element) {
-      element.textContent = result;
-    }
-  }
-
-  // Calculate immediately when script loads
-  calculateRuntime();
-  
-  // Update every day at midnight
-  setInterval(() => {
-    const now = new Date();
-    if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
-      calculateRuntime();
-    }
-  }, 1000);
-</script>

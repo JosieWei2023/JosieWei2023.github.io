@@ -89,5 +89,7 @@ class OpenHeart extends HTMLElement {
   }
 }
 
-// Register the web component
-customElements.define("open-heart", OpenHeart);
+// Register the web component once, including during development hot reloads.
+if (!customElements.get("open-heart")) {
+  customElements.define("open-heart", OpenHeart);
+}

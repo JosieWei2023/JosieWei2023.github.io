@@ -10,13 +10,57 @@ const config = {
 }
 ---
 
-<div id="tcomment"></div>
-<script is:inline src="https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js"></script>
-<script is:inline define:vars={{ config }}>
-  twikoo.init(config)
+<div id="tcomment" data-config={JSON.stringify(config)}>
+  <p class="comment-placeholder">评论将在滚动到这里时加载…</p>
+</div>
+<script is:inline>
+  (() => {
+    const container = document.querySelector('#tcomment')
+    if (!container) return
+
+    let loaded = false
+    const loadComments = () => {
+      if (loaded) return
+      loaded = true
+
+      const config = JSON.parse(container.dataset.config || '{}')
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js'
+      script.async = true
+      script.onload = () => {
+        container.textContent = ''
+        window.twikoo?.init(config)
+      }
+      script.onerror = () => {
+        container.textContent = '评论加载失败，请稍后重试。'
+      }
+      document.head.appendChild(script)
+    }
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return
+          observer.disconnect()
+          loadComments()
+        },
+        { rootMargin: '600px 0px' },
+      )
+      observer.observe(container)
+    } else {
+      loadComments()
+    }
+  })()
 </script>
 
 <style is:global>
+.comment-placeholder {
+  color: #888;
+  font-size: 0.875rem;
+  min-height: 1px;
+  text-align: center;
+}
+
 .tk-meta-input {
   background-color: white;
 }
