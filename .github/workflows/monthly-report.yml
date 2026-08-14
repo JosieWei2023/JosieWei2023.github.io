@@ -22,6 +22,7 @@ jobs:
           node-version: '22'
 
       - name: Run Generate Script
+        id: generate
         env:
           # 在 GitHub 仓库设置里配好你的 NeoDB Token
           NEODB_TOKEN: ${{ secrets.NEODB_TOKEN }}
@@ -31,5 +32,5 @@ jobs:
         # 这个开源 action 会自动把脚本生成的新文件 commit 进仓库
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "🤖 auto-generate: ${{ env.YEAR }}-${{ env.MONTH }} monthly neodb report"
+          commit_message: "🤖 auto-generate: ${{ steps.generate.outputs.report_period }} monthly neodb report"
           file_pattern: 'src/content/posts/*.mdx'

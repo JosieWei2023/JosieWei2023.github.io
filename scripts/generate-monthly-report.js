@@ -6,6 +6,10 @@ const lastMonthDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 const year = lastMonthDate.getFullYear();
 const month = String(lastMonthDate.getMonth() + 1).padStart(2, '0');
 
+if (process.env.GITHUB_OUTPUT) {
+  fs.appendFileSync(process.env.GITHUB_OUTPUT, `report_period=${year}-${month}\n`);
+}
+
 const outputDir = path.join(process.cwd(), 'src/content/posts'); // 确认是 posts 目录
 const fileName = `${year}-${month}-neodb-report.mdx`; 
 const filePath = path.join(outputDir, fileName);
