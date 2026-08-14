@@ -11,7 +11,10 @@ export default defineConfig({
   // 2. 显式添加这一行，防止 sitemap 插件在生成链接时产生歧义
   trailingSlash: 'ignore',
 
-  prefetch: true,
+  prefetch: {
+    defaultStrategy: 'hover',
+    prefetchAll: false,
+  },
   markdown: {
     shikiConfig: {
       theme: "one-dark-pro",

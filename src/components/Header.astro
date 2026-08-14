@@ -17,7 +17,7 @@ const { translate: t } = Astro.locals
     un-flex="~ col gap-2.5"
     class="cursor-pointer transition-[padding,background] duration-800 ease-in-out"
   >
-    <a class="normal" href="/">
+    <a class="normal" href="/" data-astro-prefetch="hover">
       <h3 class="text-5 font-extrabold font-serif">{author}</h3>
       <h1 class="text-8 font-extrabold font-serif">{title}</h1>
     </a>
@@ -28,7 +28,7 @@ const { translate: t } = Astro.locals
       {
         navs.map((nav) => (
           <li>
-            <a href={nav.href}>{t(nav.name)}</a>
+            <a href={nav.href} data-astro-prefetch="hover">{t(nav.name)}</a>
           </li>
         ))
       }
@@ -37,7 +37,14 @@ const { translate: t } = Astro.locals
       {
         socials.map((soc) => (
           <li>
-            <a href={soc.href} target="_blank" title={soc.name} class={`icon i-mdi-${soc.name}`} />
+            <a
+              href={soc.href}
+              target="_blank"
+              title={soc.name}
+              aria-label={soc.name}
+              rel="noopener noreferrer"
+              class={`icon i-mdi-${soc.name}`}
+            />
           </li>
         ))
       }

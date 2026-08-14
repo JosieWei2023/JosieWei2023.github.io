@@ -31,14 +31,14 @@ const { showLeft = true, showRight = true, leftTitle, rightTitle, leftUrl, right
       showLeft && (
         <span class="inline-flex items-center">
           <i class="i-mdi-chevron-double-left icon" />
-          <a href={leftUrl}>{leftTitle}</a>
+          <a href={leftUrl} data-astro-prefetch="hover">{leftTitle}</a>
         </span>
       )
     }
     {
       showRight && (
         <span class="inline-flex items-center">
-          <a href={rightUrl}>{rightTitle}</a>
+          <a href={rightUrl} data-astro-prefetch="hover">{rightTitle}</a>
           <i class="i-mdi-chevron-double-right icon" />
         </span>
       )
