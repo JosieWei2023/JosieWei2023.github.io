@@ -8,10 +8,12 @@ const { record } = Astro.props;
 
 // 计算星星数量
 const calculateStars = (rating: number) => {
-  if (!rating) return { fullStars: 0, halfStar: 0, emptyStars: 5 };
-  const starCount = (rating * 5) / 10;
+  const normalizedRating = Number.isFinite(rating)
+    ? Math.min(10, Math.max(0, rating))
+    : 0;
+  const starCount = normalizedRating / 2;
   const fullStars = Math.floor(starCount);
-  const halfStar = rating % 2 ? 1 : 0;
+  const halfStar = normalizedRating % 2 ? 1 : 0;
   const emptyStars = 5 - (fullStars + halfStar);
   return { fullStars, halfStar, emptyStars };
 };
@@ -22,6 +24,7 @@ const { fullStars, halfStar, emptyStars } = calculateStars(record?.rating_grade)
 const formatDate = (dateString: string) => {
   if (!dateString) return '';
   const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return '';
   return new Intl.DateTimeFormat('zh-CN', {
     year: 'numeric',
     month: '2-digit',

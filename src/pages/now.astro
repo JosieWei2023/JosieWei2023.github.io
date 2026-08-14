@@ -2,43 +2,18 @@
 // src/pages/now.astro
 import LayoutDefault from "~/layouts/LayoutDefault.astro";
 import NeoDBCard from "~/components/NeoDBCard.astro";
+import { fetchNeoDBShelf } from "~/utils/neodb-client.js";
 
 // 1. 获取 Token (加了 process.env 双重保险，绝对读得到)
 const AUTH_TOKEN = import.meta.env.NEODB_TOKEN || process.env.NEODB_TOKEN;
 
-if (!AUTH_TOKEN) {
-  console.error("❌ 警告：未找到 NEODB_TOKEN 环境变量，请检查 GitHub Secrets！");
-}
-
-// 2. 抓取数据的通用函数
-async function fetchNeoDB(category: string) {
-  try {
-    // 🚨 修正：把 /fetch 换成了 /complete (代表已看/已读的书架)，并加上了 page=1
-    const res = await fetch(`https://neodb.social/api/me/shelf/complete?category=${category}&page=1`, {
-      headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-        Accept: 'application/json',
-      },
-    });
-    
-    if (!res.ok) {
-        console.error(`NeoDB 抓取失败 (${category}): HTTP ${res.status}`);
-        return [];
-    }
-    
-    const json = await res.json();
-    // 拿到数据后，只截取前 4 个展示
-    return json.data ? json.data.slice(0, 4) : [];
-  } catch (error) {
-    console.error(`NeoDB 请求出错 (${category}):`, error);
-    return [];
-  }
-}
-
-// 3. 在构建时直接抓取数据
-// 因为用了 api/me 接口，系统会自动识别这个 Token 属于谁，不用填用户名
-const recentMovies = await fetchNeoDB('movie');
-const recentBooks = await fetchNeoDB('book');
+// 两个请求并行执行；失败或超时会返回空数组，不中断整站构建。
+const [moviesResult, booksResult] = await Promise.all([
+  fetchNeoDBShelf('movie', AUTH_TOKEN, { limit: 4, retries: 1 }),
+  fetchNeoDBShelf('book', AUTH_TOKEN, { limit: 4, retries: 1 }),
+]);
+const recentMovies = moviesResult.data;
+const recentBooks = booksResult.data;
 
 // 自动获取构建日期
 const lastModified = new Date().toISOString().split('T')[0];

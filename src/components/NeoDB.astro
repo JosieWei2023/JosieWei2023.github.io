@@ -1,47 +1,23 @@
 ---
 // NeoDB Card Component (豆瓣风重构版)
+import { fetchNeoDBItem } from '~/utils/neodb-client.js';
+
 interface Props {
   dbUrl: string;
 }
 
 const { dbUrl } = Astro.props;
-const API_URL = "https://neodb.social/api/me/shelf/item/";
-const AUTH_TOKEN = import.meta.env.NEODB_TOKEN;
-
-if (!AUTH_TOKEN) {
-  console.error("❌ 警告：未找到 NEODB_TOKEN 环境变量, NeoDB 数据将无法加载！");
-}
-
-const itemUuidMatch = dbUrl.match(/.*neodb\.social\/.*\/(.*)/);
-if (!itemUuidMatch) {
-  throw new Error("Invalid URL format");
-}
-
-const itemUuid = itemUuidMatch[1];
-const dbApiUrl = `${API_URL}${itemUuid}`;
-
-let dbData;
-if (AUTH_TOKEN) {
-  try {
-    const response = await fetch(dbApiUrl, {
-      headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
-    });
-
-    if (!response.ok) {
-      throw new Error(`NeoDB request failed with HTTP ${response.status}`);
-    }
-
-    const result = await response.json();
-    dbData = result?.item ? result : undefined;
-  } catch (error) {
-    console.error("Failed to fetch NeoDB data:", error);
-  }
-}
+const AUTH_TOKEN = import.meta.env.NEODB_TOKEN || process.env.NEODB_TOKEN;
+const itemResult = await fetchNeoDBItem(dbUrl, AUTH_TOKEN);
+const dbData = itemResult.ok ? itemResult.data : null;
 
 const calculateStars = (rating: number) => {
-  const starCount = (rating * 5) / 10;
+  const normalizedRating = Number.isFinite(rating)
+    ? Math.min(10, Math.max(0, rating))
+    : 0;
+  const starCount = normalizedRating / 2;
   const fullStars = Math.floor(starCount);
-  const halfStar = rating % 2 ? 1 : 0;
+  const halfStar = normalizedRating % 2 ? 1 : 0;
   const emptyStars = 5 - (fullStars + halfStar);
   return { fullStars, halfStar, emptyStars };
 };
@@ -50,6 +26,7 @@ const { fullStars, halfStar, emptyStars } = dbData ? calculateStars(dbData.ratin
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return '';
   return new Intl.DateTimeFormat('zh-CN', {
     year: 'numeric', month: '2-digit', day: '2-digit'
   }).format(date).replace(/\//g, '年') + '日';
@@ -86,7 +63,7 @@ const formatDate = (dateString: string) => {
     {/* 2. 下半部分：个人主观短评（灰色小卡片包裹） */}
     <div class="db-personal-review">
       <div class="db-rating-row">
-        <span class="db-date">{formatDate(dbData.created_time)} 看过</span>
+        <span class="db-date">{formatDate(dbData.created_time) || '日期未知'} 看过</span>
         <span class="db-stars">
           {[...Array(fullStars)].map(() => <i class="fa-solid fa-star"></i>)}
           {halfStar === 1 && <i class="fa-solid fa-star-half-stroke"></i>}
@@ -100,7 +77,9 @@ const formatDate = (dateString: string) => {
     </div>
   </div>
 ) : (
-  <p style="text-align: center;"><small>Failed to fetch content.</small></p>
+  <p class="db-fallback">
+    <small>NeoDB 数据暂时不可用，<a href={dbUrl} target="_blank" rel="noreferrer">前往 NeoDB 查看</a>。</small>
+  </p>
 )}
 
 <style>
@@ -193,6 +172,12 @@ const formatDate = (dateString: string) => {
     font-size: 0.95rem;
     line-height: 1.6;
     color: var(--card-text-color-main, #333);
+}
+
+.db-fallback {
+    margin: 1rem 0;
+    color: #888;
+    text-align: center;
 }
 
 /* 适配手机端 */
