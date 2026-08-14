@@ -1,5 +1,6 @@
 ---
-// src/components/MDXImage.astro
+import { Image } from 'astro:assets';
+
 const { src, alt, title } = Astro.props;
 
 // 核心修改：如果没写 title，就用 alt 当作图注。
@@ -9,10 +10,11 @@ const caption = title || (isDefaultAlt ? null : alt);
 ---
 
 <figure class="my-8 flex flex-col items-center justify-center">
-  <img 
+  <Image
     src={src} 
-    alt={alt} 
+    alt={alt ?? ''}
     title={title}
+    inferSize
     class="rounded-lg shadow-md max-w-full h-auto transition-transform duration-300 hover:scale-[1.01]"
     loading="lazy" 
     decoding="async"

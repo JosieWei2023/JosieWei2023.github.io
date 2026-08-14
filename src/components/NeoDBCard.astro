@@ -36,6 +36,10 @@ const formatDate = (dateString: string) => {
       <img 
         src={record.item.cover_image_url} 
         alt={record.item.title}
+        width="90"
+        height="135"
+        loading="lazy"
+        decoding="async"
       />
     </div>
     <div class="db-card-content">

@@ -21,13 +21,21 @@ const itemUuid = itemUuidMatch[1];
 const dbApiUrl = `${API_URL}${itemUuid}`;
 
 let dbData;
-try {
-  const response = await fetch(dbApiUrl, {
-    headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
-  });
-  dbData = await response.json();
-} catch (error) {
-  console.error("Failed to fetch NeoDB data:", error);
+if (AUTH_TOKEN) {
+  try {
+    const response = await fetch(dbApiUrl, {
+      headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
+    });
+
+    if (!response.ok) {
+      throw new Error(`NeoDB request failed with HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+    dbData = result?.item ? result : undefined;
+  } catch (error) {
+    console.error("Failed to fetch NeoDB data:", error);
+  }
 }
 
 const calculateStars = (rating: number) => {
@@ -52,7 +60,15 @@ const formatDate = (dateString: string) => {
   <div class="douban-layout">
     {/* 1. 上半部分：官方客观信息（无卡片边框） */}
     <div class="db-official-info">
-      <img src={dbData.item.cover_image_url} alt="Cover" class="db-cover" />
+      <img
+        src={dbData.item.cover_image_url}
+        alt={`${dbData.item.title} 封面`}
+        class="db-cover"
+        width="90"
+        height="125"
+        loading="lazy"
+        decoding="async"
+      />
       <div class="db-meta">
         <div class="db-title-row">
           <a href={dbUrl} target="_blank" rel="noreferrer" class="db-title">
