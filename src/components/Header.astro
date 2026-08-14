@@ -53,14 +53,18 @@ const { translate: t } = Astro.locals
           </li>
         ) : (
           <li>
-            <a href={nav.href} data-astro-prefetch="hover">{t(nav.name)}</a>
+            {nav.name === 'RSS' ? (
+              <a href={nav.href}>RSS</a>
+            ) : (
+              <a href={nav.href} data-astro-prefetch="hover">{t(nav.name)}</a>
+            )}
           </li>
         ))
       }
     </ul>
-    <ul un-flex="~ row gap-1 justify-center">
-      {
-        socials.map((soc) => (
+    {socials.length > 0 && (
+      <ul un-flex="~ row gap-1 justify-center">
+        {socials.map((soc) => (
           <li>
             <a
               href={soc.href}
@@ -71,9 +75,9 @@ const { translate: t } = Astro.locals
               class={`icon i-mdi-${soc.name}`}
             />
           </li>
-        ))
-      }
-    </ul>
+        ))}
+      </ul>
+    )}
   </nav>
 </header>
 

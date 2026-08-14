@@ -12,24 +12,7 @@ export const THEME_CONFIG: App.Locals["config"] = {
   /** theme style */
   themeStyle: "light",
   /** your socials */
-  socials: [
-    //{
-      //name: "github",
-      //href: "https://github.com/JosieWei2023",
-    //},
-    {
-      name: "rss",
-      href: "/atom.xml",
-    },
-    // {
-    //   name: "twitter",
-    //   href: "https://github.com/JosieWei2023",
-    // },
-    {
-      name: "mastodon",
-      href: "https://m.cmx.im/@maoware",
-    },
-  ],
+  socials: [],
   /** your header info */
   header: {
     twitter: "@damao",
@@ -48,7 +31,8 @@ export const THEME_CONFIG: App.Locals["config"] = {
       name: "Categories",
       href: "/categories",
     },
-    { name: 'Now', href: '/now' },
+    { name: "Now", href: "/now" },
+    { name: "RSS", href: "/atom.xml" },
     // {
     //   name: "Friends",
     //   href: "/friends",
