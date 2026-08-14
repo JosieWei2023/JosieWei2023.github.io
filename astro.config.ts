@@ -1,7 +1,5 @@
 import { defineConfig } from "astro/config";
 import UnoCSS from "unocss/astro";
-import { THEME_CONFIG } from "./src/theme.config";
-import robotsTxt from "astro-robots-txt";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 
@@ -32,10 +30,7 @@ export default defineConfig({
       injectReset: true,
     }),
     
-    // 第三步：所有页面生成完后，再生成 Sitemap
-    // sitemap(),
-    
-    // 第四步：最后生成 robots.txt (因为它引用了 sitemap)
-    // robotsTxt(), 
+    // 第三步：为搜索引擎生成 Sitemap
+    sitemap(),
   ],
 });

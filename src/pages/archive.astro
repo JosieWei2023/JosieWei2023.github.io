@@ -18,7 +18,7 @@ posts.forEach((post: Post) => {
 
 ---
 
-<LayoutDefault>
+<LayoutDefault title="归档" desc="按年份浏览大猫的部落格文章">
   <div un-flex="~ col gap-4">
     {
       Array.from(postByYear.entries()).map(([year, posts]) => (

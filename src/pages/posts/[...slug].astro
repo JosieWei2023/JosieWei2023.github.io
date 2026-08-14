@@ -1,7 +1,7 @@
 ---
 import Post from '~/components/Post.astro'
 import LayoutDefault from '~/layouts/LayoutDefault.astro'
-import { getPosts } from '~/utils'
+import { getPostDescription, getPosts } from '~/utils'
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro'
 import Pagination from '~/components/Pagination.astro'
 import Comments from '~/components/Comments.astro'
@@ -32,7 +32,15 @@ function getUrl(slug: string) {
 }
 ---
 
-<LayoutDefault title={entry.data.title} desc={entry.data.description} banner={entry.data.banner}>
+<LayoutDefault
+  title={entry.data.title}
+  desc={getPostDescription(entry, 160)}
+  banner={entry.data.banner}
+  type="article"
+  pubDate={entry.data.pubDate}
+  categories={entry.data.categories}
+  author={entry.data.author}
+>
   <Post post={entry}>
     <Content components={{ img: MDXImage }} />
   </Post>

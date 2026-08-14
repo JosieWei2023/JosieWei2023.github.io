@@ -32,14 +32,13 @@ export async function getPosts() {
 
 const parser = new MarkdownIt()
 
-export function getPostDescription(post: Post) {
-  if (post.data.description) {
-    return post.data.description
-  }
+export function getPostDescription(post: Post, maxLength = 400) {
+  const description = post.data.description?.trim()
+  if (description) return description.slice(0, maxLength)
 
   const html = parser.render(post.body)
   const sanitized = sanitizeHtml(html, { allowedTags: [] })
-  return sanitized.slice(0, 400)
+  return sanitized.replace(/\s+/g, ' ').trim().slice(0, maxLength)
 }
 
 export function formatDate(date?: Date) {

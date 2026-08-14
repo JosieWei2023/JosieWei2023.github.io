@@ -17,7 +17,10 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>
 const { page } = Astro.props
 ---
 
-<LayoutDefault>
+<LayoutDefault
+  title={`所有文章 · 第 ${page.currentPage} 页`}
+  desc={`浏览大猫的部落格全部文章，第 ${page.currentPage} 页`}
+>
   <section contain-layout un-flex="~ col gap-7.5">
     {
       page.data.map((post) => (
