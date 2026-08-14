@@ -61,14 +61,12 @@ export const THEME_CONFIG: App.Locals["config"] = {
   /** your category name mapping, which the `path` will be shown in the url */
   category_map: [
     { name: "月球背面", path: "behindthemoon" },
+    { name: "身体与运动", path: "body" },
+    { name: "山野与旅行", path: "travel" },
+    { name: "书影音", path: "bookreview" },
     { name: "中国故事", path: "lifeinchina" },
-    { name: "读书笔记", path: "bookreview" },
-    { name: "有点搞笑", path: "funnylife" },
-    { name: "记梦器", path: "dreamlog" },
-    { name: "年终总结", path: "summary" },
-    { name: "游记", path: "travel" },
-    { name: "日常", path: "daily" },
-    { name: "收藏夹", path: "favorites" },
+    { name: "年度存档", path: "summary" },
+    { name: "人间使用说明", path: "favorites" },
   ],
   /** your comment provider */
   comments: {

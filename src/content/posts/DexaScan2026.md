@@ -1,7 +1,7 @@
 ---
 title: DEXA Scan 2026 - 我真是太强了
 pubDate: 2026-05-20
-categories: ["年终总结"]
+categories: ["身体与运动"]
 description: "DEXA检测结果说我疑似肌少症和骨量减少，我对比绝对值后发现自己还是太强了。"
 ---
 

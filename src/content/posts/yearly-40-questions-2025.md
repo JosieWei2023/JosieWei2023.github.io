@@ -1,7 +1,7 @@
 ---
 title: 2025 | 年度40问
 pubDate: 2025-12-29
-categories: ["月球背面"]
+categories: ["年度存档"]
 description: ""
 ---
 

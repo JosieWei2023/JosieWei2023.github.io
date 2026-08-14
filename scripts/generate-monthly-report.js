@@ -68,7 +68,8 @@ async function generateReport() {
     let mdxContent = `---
 title: "月度书影音报告：${year}年${month}月"
 pubDate: ${today.toISOString().split('T')[0]}
-categories: ["读书笔记"]
+excludeFromFeed: true
+categories: ["书影音"]
 description: "由 GitHub Actions 自动拉取的本月读书观影总结"
 ---
 import NeoDB from '../../components/NeoDB.astro';
