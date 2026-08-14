@@ -97,15 +97,41 @@ const optimizedImage = new URL(
     }
   </head>
   <body>
-    <div un-max-lg="animate-fadein-down" un-lg="flex flex-row-reverse justify-between gap-4 px-8 mx-auto max-w-6xl" class="container contain-layout m-a">
-      <div un-lg="sticky top-0 h-screen py-20 animate-fadein-left gap-8" un-lg:flex="~ col justify-between items-start gap-4" class="p-7.5">
-        <Header />
-        <Footer class="max-lg:hidden" />
+    <div un-max-lg="animate-fadein-down" un-lg="flex flex-row-reverse justify-between gap-4 px-8 mx-auto max-w-6xl" class="site-layout container contain-layout m-a">
+      <div un-lg="sticky top-0 h-screen py-20 animate-fadein-left gap-8" un-lg:flex="~ col justify-between items-start gap-4" class="site-sidebar p-7.5">
+        <Header data-layout-header="" />
+        <Footer data-layout-footer="" />
       </div>
-      <main un-lg="py-20 min-w-xl animate-fadein-down" class="p-7.5">
+      <main un-lg="py-20 min-w-xl animate-fadein-down" class="site-main p-7.5">
         <slot />
       </main>
-      <Footer class="lg:hidden p-7.5" />
     </div>
   </body>
 </html>
+
+<style is:global>
+  @media (max-width: 1023px) {
+    .site-layout {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .site-sidebar {
+      display: contents;
+    }
+
+    [data-layout-header] {
+      order: 1;
+      padding: 1.875rem;
+    }
+
+    .site-main {
+      order: 2;
+    }
+
+    [data-layout-footer] {
+      order: 3;
+      padding: 1.875rem;
+    }
+  }
+</style>
