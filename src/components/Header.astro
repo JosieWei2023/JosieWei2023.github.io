@@ -5,7 +5,7 @@ type Props = HTMLAttributes<'header'>
 
 const { ...attrs } = Astro.props
 
-const { title, author, socials, navs } = Astro.locals.config
+const { title, author, socials, navs, category_map } = Astro.locals.config
 
 const { translate: t } = Astro.locals
 ---
@@ -26,7 +26,32 @@ const { translate: t } = Astro.locals
   <nav class="text-center font-bold" un-flex="~ col gap-2">
     <ul un-lg="flex-col items-start text-4" class="text-3.5" un-flex="~ row gap-2 justify-center">
       {
-        navs.map((nav) => (
+        navs.map((nav) => nav.name === 'Categories' ? (
+          <li class="category-nav">
+            <a
+              href={nav.href}
+              aria-haspopup="true"
+              data-astro-prefetch="hover"
+            >
+              {t(nav.name)}
+            </a>
+            <ul
+              class="category-submenu bg-background color-foreground border border-solid border-foreground rounded-md shadow-lg"
+              aria-label="文章分类"
+            >
+              {category_map.map((category) => (
+                <li>
+                  <a
+                    href={`/categories/${category.path}`}
+                    data-astro-prefetch="hover"
+                  >
+                    {category.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ) : (
           <li>
             <a href={nav.href} data-astro-prefetch="hover">{t(nav.name)}</a>
           </li>
@@ -51,3 +76,50 @@ const { translate: t } = Astro.locals
     </ul>
   </nav>
 </header>
+
+<style>
+  .category-submenu {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .category-nav {
+      position: relative;
+    }
+
+    .category-submenu {
+      position: absolute;
+      z-index: 20;
+      top: 50%;
+      right: calc(100% - 0.25rem);
+      display: flex;
+      min-width: 10rem;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.5rem;
+      opacity: 0;
+      pointer-events: none;
+      text-align: left;
+      transform: translate(0.25rem, -50%);
+      transition:
+        opacity 150ms ease,
+        transform 150ms ease,
+        visibility 150ms ease;
+      visibility: hidden;
+    }
+
+    .category-nav:hover .category-submenu,
+    .category-nav:focus-within .category-submenu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(0, -50%);
+      visibility: visible;
+    }
+
+    .category-submenu a {
+      display: block;
+      padding: 0.25rem 0.5rem;
+      white-space: nowrap;
+    }
+  }
+</style>
