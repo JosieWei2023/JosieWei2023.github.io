@@ -30,7 +30,7 @@ const runtime = years > 0
 const { website, author } = Astro.locals.config
 ---
 
-<footer font-bold text-3 un-flex="~ col gap-1" un-lg="gap-3.5" {...attrs}>
+<footer class="site-footer" font-bold text-3 un-flex="~ col gap-1" un-lg="gap-3.5" {...attrs}>
   <p>
     © {year}
     <a target="_blank" href={website} rel="noopener noreferrer">{author}</a>
@@ -48,3 +48,22 @@ const { website, author } = Astro.locals.config
     <a target="_blank" href="https://astro.build" rel="noopener noreferrer">Astro</a>
   </p>
 </footer>
+
+<style>
+  .site-footer {
+    color: #697589;
+    color: color-mix(in srgb, theme("colors.foreground") 72%, transparent);
+  }
+
+  .site-footer a {
+    color: #536176;
+    color: color-mix(in srgb, theme("colors.foreground") 82%, transparent);
+    text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+  }
+
+  .site-footer a:hover,
+  .site-footer a:focus-visible {
+    color: theme("colors.foreground");
+    background-color: transparent;
+  }
+</style>
