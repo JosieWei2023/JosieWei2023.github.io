@@ -39,9 +39,14 @@ const image =
     format: "jpeg"
   }))
 const optimizedImage = new URL(
-  image?.src ?? '/placeholder.png',
+  image?.src ?? '/typograph-og.jpg',
   Astro.site ?? themeConfig.website,
 ).toString()
+const imageWidth = image?.attributes.width ?? 1600
+const imageHeight = image?.attributes.height ?? 900
+const imageAlt = props.banner
+  ? `${props.title ?? themeConfig.title}的题图`
+  : `${themeConfig.title}的网站预览图`
 ---
 
 <html lang="zh-CN">
@@ -59,15 +64,6 @@ const optimizedImage = new URL(
           { rel: 'alternate', href: '/atom.xml', type: 'application/atom+xml', title: themeConfig.title },
           { rel: 'sitemap', href: '/sitemap-index.xml', type: 'application/xml' },
         ],
-        meta: [
-          { name: "twitter:image:src", content: optimizedImage },
-          { name: "twitter:image:alt", content: desc },
-          { name: "twitter:creator", content: header.twitter },
-          { name: "twitter:site", content: header.twitter },
-          { name: "twitter:card", content: "summary_large_image" },
-          { name: "twitter:title", content: title },
-          { name: "twitter:description", content: desc },
-        ],
       }}
       openGraph={{
         basic: {
@@ -81,6 +77,22 @@ const optimizedImage = new URL(
           locale: 'zh_CN',
           siteName: themeConfig.title,
         },
+        image: {
+          secureUrl: optimizedImage,
+          type: 'image/jpeg',
+          width: imageWidth,
+          height: imageHeight,
+          alt: imageAlt,
+        },
+      }}
+      twitter={{
+        card: 'summary_large_image',
+        site: header.twitter,
+        creator: header.twitter,
+        title,
+        description: desc,
+        image: optimizedImage,
+        imageAlt,
       }}
     />
     <meta name="author" content={author} />
