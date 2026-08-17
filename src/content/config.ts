@@ -10,11 +10,14 @@ const posts = defineCollection({
     draft: z.boolean().optional().default(false),
     excludeFromFeed: z.boolean().optional().default(false),
     customData: z.string().optional(),
-    banner: image()
-      .refine((img) => Math.max(img.width, img.height) <= 4096, {
-        message: "Width and height of the banner must less than 4096 pixels"
-      })
-      .optional(),
+    banner: z.union([
+      z.string().url().refine((url) => url.startsWith("https://"), {
+        message: "Remote banner URLs must use HTTPS"
+      }),
+      image().refine((img) => Math.max(img.width, img.height) <= 4096, {
+        message: "Width and height of the banner must be less than 4096 pixels"
+      }),
+    ]).optional(),
     categories: z.array(z.string()),
     author: z.string().optional(),
     commentsUrl: z.string().optional(),

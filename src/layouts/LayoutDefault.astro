@@ -10,7 +10,7 @@ import { getImage } from 'astro:assets'
 interface Props {
   title?: string
   desc?: string
-  banner?: ImageMetadata
+  banner?: ImageMetadata | string
   type?: 'website' | 'article'
   pubDate?: Date
   categories?: string[]
@@ -32,18 +32,21 @@ const canonical = new URL(
 const pageType = props.type ?? 'website'
 const author = props.author ?? themeConfig.author
 
+const remoteBanner = typeof props.banner === 'string' ? props.banner : undefined
+const localBanner = typeof props.banner === 'string' ? undefined : props.banner
 const image =
-  props.banner &&
+  localBanner &&
   (await getImage({
-    src: props.banner,
+    src: localBanner,
     format: "jpeg"
   }))
-const optimizedImage = new URL(
+const optimizedImage = remoteBanner ?? new URL(
   image?.src ?? '/damao-og-v2.jpg',
   Astro.site ?? themeConfig.website,
 ).toString()
-const imageWidth = image?.attributes.width ?? 1200
-const imageHeight = image?.attributes.height ?? 630
+const imageType = remoteBanner ? undefined : 'image/jpeg'
+const imageWidth = remoteBanner ? undefined : image?.attributes.width ?? 1200
+const imageHeight = remoteBanner ? undefined : image?.attributes.height ?? 630
 const imageAlt = props.banner
   ? `${props.title ?? themeConfig.title}的题图`
   : `${themeConfig.title}的网站预览图`
@@ -79,7 +82,7 @@ const imageAlt = props.banner
         },
         image: {
           secureUrl: optimizedImage,
-          type: 'image/jpeg',
+          type: imageType,
           width: imageWidth,
           height: imageHeight,
           alt: imageAlt,
