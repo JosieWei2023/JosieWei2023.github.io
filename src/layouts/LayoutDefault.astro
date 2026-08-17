@@ -39,11 +39,11 @@ const image =
     format: "jpeg"
   }))
 const optimizedImage = new URL(
-  image?.src ?? '/typograph-og.jpg',
+  image?.src ?? '/damao-og-v2.jpg',
   Astro.site ?? themeConfig.website,
 ).toString()
-const imageWidth = image?.attributes.width ?? 1600
-const imageHeight = image?.attributes.height ?? 900
+const imageWidth = image?.attributes.width ?? 1200
+const imageHeight = image?.attributes.height ?? 630
 const imageAlt = props.banner
   ? `${props.title ?? themeConfig.title}的题图`
   : `${themeConfig.title}的网站预览图`
